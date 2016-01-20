@@ -6,5 +6,5 @@ package com.company;
 public class Player {
     private int score;
     private String name;
-    //IetsVanIpOfzo
+    private Game inGame;
 }

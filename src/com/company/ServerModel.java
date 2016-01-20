@@ -11,4 +11,7 @@ public class ServerModel {
     //IetsVanIPOfzo
 
 
+    public void setMyPort(int myPort) {
+        this.myPort = myPort;
+    }
 }

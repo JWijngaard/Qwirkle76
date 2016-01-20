@@ -8,5 +8,11 @@ import java.util.ArrayList;
 public class Game {
     private ArrayList<Player> myPlayers;
     private Board myBoard;
+    private Board myTryoutBoard;
+
+    public Game(ArrayList<Player> myPlayers) {
+        this.myPlayers = myPlayers;
+    }
+
 
 }
