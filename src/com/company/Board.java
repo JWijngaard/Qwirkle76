@@ -10,36 +10,9 @@ import java.util.Collection;
  * Created by Jelle on 12/01/16.
  */
 public class Board {
-    public static void main(String[] args) {
-        Board testBoard = new Board();
-        testBoard.board[2][2].setColor(1);
-        testBoard.board[2][2].setShape(1);
-        System.out.println(testBoard.toString());
-        try {
-            testBoard.makeMove(1,1,3,10);
-        } catch (TileAlreadyPlacedException e) {
-            e.printStackTrace();
-        }
-        try {
-            testBoard.makeMove(1,1,1,1);
-        } catch (TileAlreadyPlacedException e) {
-            e.printStackTrace();
-        }
-        try {
-            testBoard.makeMove(1,1,1,2);
-        } catch (TileAlreadyPlacedException e) {
-            e.printStackTrace();
-        }
-        System.out.println(testBoard.checkLegalSituation());
-        System.out.println(testBoard.toString());
-        try {
-            testBoard.makeMove(1,1,1,1);
-        } catch (TileAlreadyPlacedException e) {
-            e.printStackTrace();
-        }
-    }
 
     private Tile[][] board;
+    private int atMove = 0;
 
     public Board() {
         board = new Tile[20][20];
@@ -54,10 +27,11 @@ public class Board {
         return board;
     }
 
-    public void makeMove(int s, int c, int c1, int c2) throws TileAlreadyPlacedException {
+    public void makeMove(int s, int c, int c1, int c2, int atMove) throws TileAlreadyPlacedException {
         if (this.board[c1][c2].getColor() == 6 && this.board[c1][c2].getShape() == 6) {
             this.board[c1][c2].setColor(c);
             this.board[c1][c2].setShape(s);
+            this.board[c1][c2].setAtMove(atMove);
         }
         else {
            throw new TileAlreadyPlacedException("A tile has already been placed at " + c1 + "," + c2);
@@ -115,6 +89,13 @@ public class Board {
         return string;
     }
 
+    public void increaseMove() {
+        atMove += 1;
+    }
+
+    public int getAtMove() {
+        return atMove;
+    }
 
     public Tile leftNeighbor(Tile me) {
         int myC1 = me.getC1();

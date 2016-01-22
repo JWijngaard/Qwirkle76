@@ -14,5 +14,11 @@ public class Game {
         this.myPlayers = myPlayers;
     }
 
+    public Board getMyBoard() {
+        return myBoard;
+    }
 
+    public Board getMyTryoutBoard() {
+        return myTryoutBoard;
+    }
 }

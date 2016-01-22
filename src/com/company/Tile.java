@@ -8,6 +8,7 @@ public class Tile {
     private int color;
     private int c1;
     private int c2;
+    private int atMove = -1;
 
     public Tile(int c1, int c2) {
         this.c1 = c1;
@@ -25,6 +26,14 @@ public class Tile {
 
     public int getShape() {
         return shape;
+    }
+
+    public int getAtMove() {
+        return atMove;
+    }
+
+    public void setAtMove(int currentMove) {
+        atMove = currentMove;
     }
 
     public int getColor() {
