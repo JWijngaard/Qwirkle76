@@ -12,11 +12,10 @@ import java.net.Socket;
 public class ServerController extends Thread {
 
     List<String> myList = new ArrayList<String>();
-
+    List<Socket> clients = new ArrayList<>();
     public ServerController() {
-
-        int portNumber = 4000;
         Socket socket;
+        int portNumber = 4000;
         ServerSocket serverSocket = null;
         System.out.println("Server is Waiting for Players");
         try {
@@ -31,6 +30,7 @@ public class ServerController extends Thread {
             try {
                 socket = serverSocket.accept();
                 System.out.println("connection Established");
+                clients.add(socket);
                 ServerThread serverThread = new ServerThread(socket);
                 serverThread.start();
             } catch (Exception e) {
@@ -66,23 +66,29 @@ public class ServerController extends Thread {
                     line = in.readLine();
                     while (line != null) {
                         List<String> words = Arrays.asList((line.split("\\s+")));
-                        System.out.println(words);
-                        System.out.println(myList);
                         //TODO: Parser
-                        if (words.get(0).equals("Hello")) {
-                            if(!myList.contains(words.get(1))) {
-                                out.println("Hello_from_the_other_side");
+                        if (words.get(0).equals("hello")) {
+                            if (!myList.contains(words.get(1))) {
+                                out.println("hello_from_the_other_side");
                                 myList.add(words.get(1));
-                            }else {
+
+                            } else {
                                 out.println("User name : " + words.get(1) + " is already in use");
                             }
-                        }else {
+                        } else if (words.get(0).equals("Place")) {
+                            //TODO: Place Stone
+                        } else if (words.get(0).equals("trade")) {
+                            //TODO: Trade Stone
+                        } else if (words.get(0).equals("join")) {
+                            //TODO: client joins game
+                        } else if (words.get(0).equals("players?")) {
+                            sendToAllTCPAllPlayers(myList);
+                        } else {
                             out.println("");
                             out.flush();
                         }
                         out.flush();
                         System.out.println(myList);
-                        System.out.println("-1");
                         break;
                     }
                 }
@@ -112,6 +118,41 @@ public class ServerController extends Thread {
 
                 } catch (IOException ie) {
                     System.out.println("Socket Close Error");
+                }
+            }
+        }
+    }
+
+    public void sendToAllTCPAllPlayers(List<String> message) {
+        for (Socket z : clients) {
+            if (z != null) {
+                //basically this chunk of code declares output and input streams
+                //for each socket in your array of saved sockets
+                PrintStream outToClient = null;
+                try {
+                    outToClient = new PrintStream(z.getOutputStream());
+                    outToClient.println(message);
+                } catch (IOException e) {
+                    System.out.println("Caught an IO exception trying "
+                            + "to send to TCP connections");
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+    public void sendToAllTCPMessage(String message) {
+        for (Socket z : clients) {
+            if (z != null) {
+                //basically this chunk of code declares output and input streams
+                //for each socket in your array of saved sockets
+                PrintStream outToClient = null;
+                try {
+                    outToClient = new PrintStream(z.getOutputStream());
+                    outToClient.println(message);
+                } catch (IOException e) {
+                    System.out.println("Caught an IO exception trying "
+                            + "to send to TCP connections");
+                    e.printStackTrace();
                 }
             }
         }
