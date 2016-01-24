@@ -11,6 +11,8 @@ public class Game {
     private Board myTryoutBoard;
 
     public Game(ArrayList<Player> myPlayers) {
+        myBoard = new Board();
+        myTryoutBoard = new Board();
         this.myPlayers = myPlayers;
     }
 
@@ -20,5 +22,9 @@ public class Game {
 
     public Board getMyTryoutBoard() {
         return myTryoutBoard;
+    }
+
+    public ArrayList<Player> getMyPlayers() {
+        return myPlayers;
     }
 }

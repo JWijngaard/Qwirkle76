@@ -1,5 +1,6 @@
 package com.company;
 
+import com.company.Exceptions.IllegalMoveException;
 import com.company.Exceptions.TileAlreadyPlacedException;
 
 import java.lang.reflect.Array;
@@ -13,6 +14,17 @@ public class Board {
 
     private Tile[][] board;
     private int atMove = 0;
+    private int qwirkles = 0;
+
+    public int getQwirkles() {
+        try {
+            this.checkLegalSituation();
+        }
+        catch (IllegalMoveException e) {
+            e.printStackTrace();
+        }
+        return qwirkles;
+    }
 
     public Board() {
         board = new Tile[20][20];
@@ -149,7 +161,7 @@ public class Board {
     //Check eerst of kleur of shape, als niet dan fout. Als wel ga verder met alleen kleur of shape. Als geen blokje dan reset naar 6.
     //Ook checken of iederen uberhaupt wel een neighbour heeft.
     //Checken of een dubbele er in zit door ze allemaal in een nieuwe ArrayList te plaatsen.
-    public boolean checkLegalSituation() {
+    public boolean checkLegalSituation() throws IllegalMoveException {
         boolean LegalSituationRows = true;
         boolean LegalSituationColumns = true;
         //First we will check rows, based on color. (left to right)
@@ -173,46 +185,8 @@ public class Board {
                                 me = rightNeighbor(me);
                                 if (rightColor == rightNeighbor(me).getColor() && !shapes.contains(me.getShape())) {
                                     shapes.add(me.getShape());
+                                    qwirkles += 1;
                                     me = rightNeighbor(me);
-                                    if (rightColor == rightNeighbor(me).getColor() && !shapes.contains(me.getShape())) {
-                                        shapes.add(me.getShape());
-                                        me = rightNeighbor(me);
-                                        if (rightColor == rightNeighbor(me).getColor() && !shapes.contains(me.getShape())) {
-                                            shapes.add(me.getShape());
-                                            me = rightNeighbor(me);
-                                            if (rightColor == rightNeighbor(me).getColor() && !shapes.contains(me.getShape())) {
-                                                shapes.add(me.getShape());
-                                                me = rightNeighbor(me);
-                                                if (rightColor == rightNeighbor(me).getColor() && !shapes.contains(me.getShape())) {
-                                                    System.out.println("Wtf is hier gaande?!");
-                                                }
-                                                else if (me.getColor() == 6 || rightNeighbor(me).getColor() == 6) {
-
-                                                }
-                                                else {
-                                                    currentLegalSituation = false;
-                                                }
-                                            }
-                                            else if (me.getColor() == 6 || rightNeighbor(me).getColor() == 6) {
-
-                                            }
-                                            else {
-                                                currentLegalSituation = false;
-                                            }
-                                        }
-                                        else if (me.getColor() == 6 || rightNeighbor(me).getColor() == 6) {
-
-                                        }
-                                        else {
-                                            currentLegalSituation = false;
-                                        }
-                                    }
-                                    else if (me.getColor() == 6 || rightNeighbor(me).getColor() == 6) {
-
-                                    }
-                                    else {
-                                        currentLegalSituation = false;
-                                    }
                                 }
                                 else if (me.getColor() == 6 || rightNeighbor(me).getColor() == 6) {
 
@@ -271,35 +245,6 @@ public class Board {
                                     if (rightShape == rightNeighbor(me).getShape() && !colors.contains(me.getShape())) {
                                         colors.add(me.getShape());
                                         me = rightNeighbor(me);
-                                        if (rightShape == rightNeighbor(me).getShape() && !colors.contains(me.getShape())) {
-                                            colors.add(me.getShape());
-                                            me = rightNeighbor(me);
-                                            if (rightShape == rightNeighbor(me).getShape() && !colors.contains(me.getShape())) {
-                                                colors.add(me.getShape());
-                                                me = rightNeighbor(me);
-                                                if (rightShape == rightNeighbor(me).getShape() && !colors.contains(me.getShape())) {
-                                                    System.out.println("Wtf is hier gaande?!");
-                                                }
-                                                else if (me.getShape() == 6 || rightNeighbor(me).getShape() == 6) {
-
-                                                }
-                                                else {
-                                                    currentLegalSituation = false;
-                                                }
-                                            }
-                                            else if (me.getShape() == 6 || rightNeighbor(me).getShape() == 6) {
-
-                                            }
-                                            else {
-                                                currentLegalSituation = false;
-                                            }
-                                        }
-                                        else if (me.getShape() == 6 || rightNeighbor(me).getShape() == 6) {
-
-                                        }
-                                        else {
-                                            currentLegalSituation = false;
-                                        }
                                     }
                                     else if (me.getShape() == 6 || rightNeighbor(me).getShape() == 6) {
 
@@ -370,46 +315,8 @@ public class Board {
                                 me = lowerNeighbor(me);
                                 if (rightColor == lowerNeighbor(me).getColor() && !shapes.contains(me.getShape())) {
                                     shapes.add(me.getShape());
+                                    qwirkles += 1;
                                     me = lowerNeighbor(me);
-                                    if (rightColor == lowerNeighbor(me).getColor() && !shapes.contains(me.getShape())) {
-                                        shapes.add(me.getShape());
-                                        me = lowerNeighbor(me);
-                                        if (rightColor == lowerNeighbor(me).getColor() && !shapes.contains(me.getShape())) {
-                                            shapes.add(me.getShape());
-                                            me = lowerNeighbor(me);
-                                            if (rightColor == lowerNeighbor(me).getColor() && !shapes.contains(me.getShape())) {
-                                                shapes.add(me.getShape());
-                                                me = lowerNeighbor(me);
-                                                if (rightColor == lowerNeighbor(me).getColor() && !shapes.contains(me.getShape())) {
-                                                    System.out.println("Wtf is hier gaande?!");
-                                                }
-                                                else if (me.getColor() == 6 || lowerNeighbor(me).getColor() == 6) {
-
-                                                }
-                                                else {
-                                                    currentLegalSituation = false;
-                                                }
-                                            }
-                                            else if (me.getColor() == 6 || lowerNeighbor(me).getColor() == 6) {
-
-                                            }
-                                            else {
-                                                currentLegalSituation = false;
-                                            }
-                                        }
-                                        else if (me.getColor() == 6 || lowerNeighbor(me).getColor() == 6) {
-
-                                        }
-                                        else {
-                                            currentLegalSituation = false;
-                                        }
-                                    }
-                                    else if (me.getColor() == 6 || lowerNeighbor(me).getColor() == 6) {
-
-                                    }
-                                    else {
-                                        currentLegalSituation = false;
-                                    }
                                 }
                                 else if (me.getColor() == 6 || lowerNeighbor(me).getColor() == 6) {
 
@@ -468,35 +375,6 @@ public class Board {
                                     if (rightShape == lowerNeighbor(me).getShape() && !colors.contains(me.getShape())) {
                                         colors.add(me.getShape());
                                         me = lowerNeighbor(me);
-                                        if (rightShape == lowerNeighbor(me).getShape() && !colors.contains(me.getShape())) {
-                                            colors.add(me.getShape());
-                                            me = lowerNeighbor(me);
-                                            if (rightShape == lowerNeighbor(me).getShape() && !colors.contains(me.getShape())) {
-                                                colors.add(me.getShape());
-                                                me = lowerNeighbor(me);
-                                                if (rightShape == lowerNeighbor(me).getShape() && !colors.contains(me.getShape())) {
-                                                    System.out.println("Wtf is hier gaande?!");
-                                                }
-                                                else if (me.getShape() == 6 || lowerNeighbor(me).getShape() == 6) {
-
-                                                }
-                                                else {
-                                                    currentLegalSituation = false;
-                                                }
-                                            }
-                                            else if (me.getShape() == 6 || lowerNeighbor(me).getShape() == 6) {
-
-                                            }
-                                            else {
-                                                currentLegalSituation = false;
-                                            }
-                                        }
-                                        else if (me.getShape() == 6 || lowerNeighbor(me).getShape() == 6) {
-
-                                        }
-                                        else {
-                                            currentLegalSituation = false;
-                                        }
                                     }
                                     else if (me.getShape() == 6 || lowerNeighbor(me).getShape() == 6) {
 

@@ -1,0 +1,58 @@
+package com.company;
+
+import org.junit.Test;
+
+import java.util.ArrayList;
+
+import static org.junit.Assert.*;
+
+/**
+ * Created by Jelle on 24/01/16.
+ */
+public class PlayerTest {
+
+    ArrayList<Move> myMoves = new ArrayList<Move>();
+    Move move1 = new Move(1,2,1,2);
+    Move move2 = new Move(2,2,1,3);
+    Move move3 = new Move(4,2,1,4);
+    Move move4 = new Move(2,1,2,2);
+    Move move5 = new Move(2,3,3,2);
+
+    @Test
+    public void testSameRowAndTestSameColumn() throws Exception {
+        Player testPlayer = new Player("Pieter");
+        myMoves.clear();
+        myMoves.add(move1);
+        myMoves.add(move2);
+        myMoves.add(move3);
+        System.out.println(myMoves);
+        assertEquals(testPlayer.sameRow(myMoves), true);
+        assertEquals(testPlayer.sameColumn(myMoves), false);
+        System.out.println(testPlayer.sameRow(myMoves));
+        System.out.println(testPlayer.sameColumn(myMoves));
+        myMoves.clear();
+        myMoves.add(move1);
+        myMoves.add(move4);
+        myMoves.add(move5);
+        System.out.println(myMoves);
+        assertEquals(testPlayer.sameColumn(myMoves), true);
+        assertEquals(testPlayer.sameRow(myMoves), false);
+        System.out.println(testPlayer.sameColumn(myMoves));
+        System.out.println(testPlayer.sameRow(myMoves));
+    }
+
+    @Test
+    public void testMakeMoveGetPoints() throws Exception {
+        Player testPlayer = new Player("Pieter");
+        ArrayList<Player> players = new ArrayList<Player>();
+        players.add(testPlayer);
+        Game myTestGame = new Game(players);
+        testPlayer.setMyGame(myTestGame);
+        myMoves.clear();
+        myMoves.add(move1);
+        myMoves.add(move2);
+        myMoves.add(move3);
+        assertEquals(testPlayer.makeMoveGetPoints(myMoves), 3);
+        System.out.println(myTestGame.getMyBoard().toString());
+    }
+}
