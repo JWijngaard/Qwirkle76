@@ -36,6 +36,9 @@ public class ClientController {
                 response = in.readLine();
                 System.out.println(response);
                 line = out.readLine();
+                if(line.equals("Quit")){
+                    break;
+                }
 
             }
         }
