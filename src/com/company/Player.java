@@ -53,7 +53,8 @@ public class Player {
 
     public int makeMoveGetPoints(ArrayList<Move> moves) {
         myGame.getMyTryoutBoard().increaseMove();
-        int atMove =myGame.getMyTryoutBoard().getAtMove();
+        int myPoints = 0;
+        int atMove = myGame.getMyTryoutBoard().getAtMove();
         try {
             checkSameRowOrColumn(moves);
             for (int i = 0; i < moves.size(); i++) {
@@ -71,14 +72,21 @@ public class Player {
         }
         try {
             if (myGame.getMyTryoutBoard().checkLegalSituation()) {
-                return calculatePoints(moves);
+                System.out.println("TESTOBAMA");
+                System.out.println(moves);
+                myPoints = calculatePoints(moves);
+            }
+            else {
+                System.out.println("TESTSPAGHETTIMONSTER");
+                myPoints = -1;
             }
         }
         catch (IllegalMoveException e) {
             e.printStackTrace();
             return -1;
         }
-        return -1;
+        System.out.println(myGame.getMyTryoutBoard().toString());
+        return myPoints;
     }
 
     public int calculatePoints(ArrayList<Move> moves) {

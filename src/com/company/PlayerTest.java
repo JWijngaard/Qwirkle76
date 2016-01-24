@@ -12,11 +12,12 @@ import static org.junit.Assert.*;
 public class PlayerTest {
 
     ArrayList<Move> myMoves = new ArrayList<Move>();
-    Move move1 = new Move(1,2,1,2);
-    Move move2 = new Move(2,2,1,3);
+    Move move1 = new Move(2,2,1,2);
+    Move move2 = new Move(3,2,1,3);
     Move move3 = new Move(4,2,1,4);
     Move move4 = new Move(2,1,2,2);
     Move move5 = new Move(2,3,3,2);
+    Move move6 = new Move(2,5,0,2);
 
     @Test
     public void testSameRowAndTestSameColumn() throws Exception {
@@ -52,7 +53,13 @@ public class PlayerTest {
         myMoves.add(move1);
         myMoves.add(move2);
         myMoves.add(move3);
-        assertEquals(testPlayer.makeMoveGetPoints(myMoves), 3);
-        System.out.println(myTestGame.getMyBoard().toString());
+        assertEquals(3, testPlayer.makeMoveGetPoints(myMoves));
+        System.out.println(myTestGame.getMyTryoutBoard().toString());
+        myMoves.clear();
+        myMoves.add(move4);
+        myMoves.add(move5);
+        myMoves.add(move6);
+        assertEquals(4, testPlayer.makeMoveGetPoints(myMoves));
+        System.out.println(myTestGame.getMyTryoutBoard().toString());
     }
 }

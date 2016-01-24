@@ -97,6 +97,18 @@ public class BoardTest {
     }
 
     @Test
+    public void testCheckLegalSituationActuallyLegal2() throws Exception {
+        Board testBoard = new Board();
+        testBoard.makeMove(2,2,1,2,1);
+        testBoard.makeMove(3,2,1,3,1);
+        testBoard.makeMove(4,2,1,4,1);
+        testBoard.makeMove(2,1,2,2,1);
+        testBoard.makeMove(2,3,3,2,1);
+        testBoard.makeMove(2,5,0,2,1);
+        assertEquals(true, testBoard.checkLegalSituation());
+    }
+
+    @Test
     public void testCheckLegalSituationNotLegalSameNeighbor() throws Exception {
         Board testBoard = new Board();
         System.out.println(testBoard.checkLegalSituation());
