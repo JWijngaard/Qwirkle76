@@ -15,7 +15,7 @@ public class ServerController extends Thread {
     List<Socket> clients = new ArrayList<>();
     public ServerController() {
         Socket socket;
-        int portNumber = 4000;
+        int portNumber = 8901;
         ServerSocket serverSocket = null;
         System.out.println("Server is Waiting for Players");
         try {

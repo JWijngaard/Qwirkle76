@@ -15,7 +15,7 @@ public class ClientController {
         PrintWriter outServer = null;
 
         try {
-            socketOne = new Socket(address, 4000);
+            socketOne = new Socket(address, 8901);
             out = new BufferedReader(new InputStreamReader(System.in));
             in = new BufferedReader(new InputStreamReader(socketOne.getInputStream()));
             outServer = new PrintWriter(socketOne.getOutputStream());
