@@ -5,12 +5,19 @@ package com.company;
  */
 public class ServerView {
 
-    public void enterPortNumber(){
-        System.out.println("Enter the server portnumber :");
+    public ServerView() {
+
     }
 
-    public void showPortNumber(int portNumber){
-        System.out.println("The portNumber is " + portNumber);
+    public void logMessage(String message){
+        System.out.println("Server: " + message);
     }
 
+    public void logMessageInt(String message, int messageInt){
+        System.out.println("Server: " + message + messageInt);
+    }
+
+    public void logInt(int messageInt){
+        System.out.println("Server: " + messageInt);
+    }
 }
