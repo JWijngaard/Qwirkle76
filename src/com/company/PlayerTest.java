@@ -18,6 +18,9 @@ public class PlayerTest {
     Move move4 = new Move(2,1,2,2);
     Move move5 = new Move(2,3,3,2);
     Move move6 = new Move(2,5,0,2);
+    Move move7 = new Move(2,4,4,2);
+    Move move8 = new Move(2,0,5,2);
+    Move move9 = new Move(2,1,6,2);
 
     @Test
     public void testSameRowAndTestSameColumn() throws Exception {
@@ -59,7 +62,14 @@ public class PlayerTest {
         myMoves.add(move4);
         myMoves.add(move5);
         myMoves.add(move6);
-        assertEquals(4, testPlayer.makeMoveGetPoints(myMoves));
+        assertEquals(7, testPlayer.makeMoveGetPoints(myMoves));
         System.out.println(myTestGame.getMyTryoutBoard().toString());
+        myMoves.clear();
+        myMoves.add(move7);
+        myMoves.add(move8);
+        assertEquals(15, testPlayer.makeMoveGetPoints(myMoves));
+        myMoves.clear();
+        myMoves.add(move9);
+        assertEquals(-1, testPlayer.makeMoveGetPoints(myMoves));
     }
 }
