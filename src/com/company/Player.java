@@ -89,17 +89,54 @@ public class Player {
         return myPoints;
     }
 
+    public int getLowestRow(ArrayList<Move> moves) {
+        Move lowest = moves.get(0);
+        for (int i = 0; i < moves.size(); i++) {
+            if (moves.get(i).getC2() < lowest.getC2()) {
+                lowest = moves.get(i);
+            }
+        }
+        int currentC1 = lowest.getC1();
+        int currentC2 = lowest.getC2();
+        while (myGame.getMyTryoutBoard().leftNeighbor(myGame.getMyTryoutBoard().getBoard()[currentC1][currentC2]).getColor() != 6) {
+            currentC2 = myGame.getMyTryoutBoard().leftNeighbor(myGame.getMyTryoutBoard().getBoard()[currentC1][currentC2]).getC1();
+        }
+        return currentC2;
+    }
+
+    public int getLowestColumn(ArrayList<Move> moves) {
+        Move lowest = moves.get(0);
+        for (int i = 0; i < moves.size(); i++) {
+            if (moves.get(i).getC1() < lowest.getC1()) {
+                lowest = moves.get(i);
+            }
+        }
+        int currentC1 = lowest.getC1();
+        int currentC2 = lowest.getC2();
+        while (myGame.getMyTryoutBoard().upperNeigbor(myGame.getMyTryoutBoard().getBoard()[currentC1][currentC2]).getColor() != 6) {
+            currentC1 = myGame.getMyTryoutBoard().upperNeigbor(myGame.getMyTryoutBoard().getBoard()[currentC1][currentC2]).getC1();
+        }
+        return currentC1;
+    }
+
     public int calculatePoints(ArrayList<Move> moves) {
-        int points = moves.size();
-        if (sameColumn(moves)) {
-            for (int i = 0; i < moves.size(); i++) {
-                Tile leftNeighbor = myGame.getMyTryoutBoard().leftNeighbor(myGame.getMyTryoutBoard().getBoard()[moves.get(i).getC1()][moves.get(i).getC2()]);
-                Tile rightNeighbor = myGame.getMyTryoutBoard().rightNeighbor(myGame.getMyTryoutBoard().getBoard()[moves.get(i).getC1()][moves.get(i).getC2()]);
-                if (leftNeighbor.getColor() != 6) {
-                    points += 2;
-                    leftNeighbor = myGame.getMyTryoutBoard().leftNeighbor(leftNeighbor);
+        try {
+            myGame.getMyTryoutBoard().checkLegalSituation();
+            System.out.println("ISDITWELLEGALDAN?" + myGame.getMyTryoutBoard().checkLegalSituation());
+            int points = moves.size();
+            System.out.println("samecolumn: samerow:");
+            System.out.println(sameColumn(moves) + "::::" + sameRow(moves));
+            System.out.println("currentPoins:");
+            System.out.println(points);
+            if (sameColumn(moves)) {
+                Tile me = myGame.getMyTryoutBoard().getBoard()[getLowestColumn(moves)][moves.get(0).getC2()];
+                int mes = 0;
+                while (me.getColor() != 6) {
+                    System.out.println("me = " + me.getColor());
+                    Tile leftNeighbor = myGame.getMyTryoutBoard().leftNeighbor(me);
+                    Tile rightNeighbor = myGame.getMyTryoutBoard().rightNeighbor(me);
                     if (leftNeighbor.getColor() != 6) {
-                        points += 1;
+                        points += 2;
                         leftNeighbor = myGame.getMyTryoutBoard().leftNeighbor(leftNeighbor);
                         if (leftNeighbor.getColor() != 6) {
                             points += 1;
@@ -109,16 +146,17 @@ public class Player {
                                 leftNeighbor = myGame.getMyTryoutBoard().leftNeighbor(leftNeighbor);
                                 if (leftNeighbor.getColor() != 6) {
                                     points += 1;
+                                    leftNeighbor = myGame.getMyTryoutBoard().leftNeighbor(leftNeighbor);
+                                    if (leftNeighbor.getColor() != 6) {
+                                        points += 1;
+                                    }
                                 }
                             }
                         }
                     }
-                }
-                if (rightNeighbor.getColor() != 6) {
-                    points += 2;
-                    rightNeighbor = myGame.getMyTryoutBoard().rightNeighbor(rightNeighbor);
                     if (rightNeighbor.getColor() != 6) {
-                        points += 1;
+                        System.out.println("IFDLIDSHFLJDSLGJHAFSJGHDFHGJLDFGHAFGHADKFSHGKQFHGJDSHG");
+                        points += 2;
                         rightNeighbor = myGame.getMyTryoutBoard().rightNeighbor(rightNeighbor);
                         if (rightNeighbor.getColor() != 6) {
                             points += 1;
@@ -128,41 +166,30 @@ public class Player {
                                 rightNeighbor = myGame.getMyTryoutBoard().rightNeighbor(rightNeighbor);
                                 if (rightNeighbor.getColor() != 6) {
                                     points += 1;
+                                    rightNeighbor = myGame.getMyTryoutBoard().rightNeighbor(rightNeighbor);
+                                    if (rightNeighbor.getColor() != 6) {
+                                        points += 1;
+                                    }
                                 }
                             }
                         }
                     }
-                }
-            }
-        }
-        else if (sameRow(moves)) {
-            for (int i = 0; i < moves.size(); i++) {
-                Tile lowerNeighbor = myGame.getMyTryoutBoard().lowerNeighbor(myGame.getMyTryoutBoard().getBoard()[moves.get(i).getC1()][moves.get(i).getC2()]);
-                Tile upperNeigbor = myGame.getMyTryoutBoard().upperNeigbor(myGame.getMyTryoutBoard().getBoard()[moves.get(i).getC1()][moves.get(i).getC2()]);
-                if (lowerNeighbor.getColor() != 6) {
-                    points += 2;
-                    lowerNeighbor = myGame.getMyTryoutBoard().lowerNeighbor(lowerNeighbor);
-                    if (lowerNeighbor.getColor() != 6) {
-                        points += 1;
-                        lowerNeighbor = myGame.getMyTryoutBoard().lowerNeighbor(lowerNeighbor);
-                        if (lowerNeighbor.getColor() != 6) {
-                            points += 1;
-                            lowerNeighbor = myGame.getMyTryoutBoard().lowerNeighbor(lowerNeighbor);
-                            if (lowerNeighbor.getColor() != 6) {
-                                points += 1;
-                                lowerNeighbor = myGame.getMyTryoutBoard().lowerNeighbor(lowerNeighbor);
-                                if (lowerNeighbor.getColor() != 6) {
-                                    points += 1;
-                                }
-                            }
-                        }
+                    me = myGame.getMyTryoutBoard().lowerNeighbor(me);
+                    mes += 1;
+                    System.out.println("mes:" + mes);
+                    if (mes > moves.size()) {
+                        points += mes - moves.size();
                     }
                 }
-                if (upperNeigbor.getColor() != 6) {
-                    points += 2;
-                    upperNeigbor = myGame.getMyTryoutBoard().upperNeigbor(upperNeigbor);
+            } else if (sameRow(moves)) {
+                Tile me = myGame.getMyTryoutBoard().getBoard()[getLowestRow(moves)][moves.get(0).getC1()];
+                int mes = 0;
+                while (me.getColor() != 6) {
+                    System.out.println("me = " + me.getColor());
+                    Tile upperNeigbor = myGame.getMyTryoutBoard().upperNeigbor(me);
+                    Tile lowerNeighbor = myGame.getMyTryoutBoard().lowerNeighbor(me);
                     if (upperNeigbor.getColor() != 6) {
-                        points += 1;
+                        points += 2;
                         upperNeigbor = myGame.getMyTryoutBoard().upperNeigbor(upperNeigbor);
                         if (upperNeigbor.getColor() != 6) {
                             points += 1;
@@ -172,16 +199,50 @@ public class Player {
                                 upperNeigbor = myGame.getMyTryoutBoard().upperNeigbor(upperNeigbor);
                                 if (upperNeigbor.getColor() != 6) {
                                     points += 1;
+                                    upperNeigbor = myGame.getMyTryoutBoard().upperNeigbor(upperNeigbor);
+                                    if (upperNeigbor.getColor() != 6) {
+                                        points += 1;
+                                    }
                                 }
                             }
                         }
                     }
+                    if (lowerNeighbor.getColor() != 6) {
+                        System.out.println("IFDLIDSHFLJDSLGJHAFSJGHDFHGJLDFGHAFGHADKFSHGKQFHGJDSHG");
+                        points += 2;
+                        lowerNeighbor = myGame.getMyTryoutBoard().lowerNeighbor(lowerNeighbor);
+                        if (lowerNeighbor.getColor() != 6) {
+                            points += 1;
+                            lowerNeighbor = myGame.getMyTryoutBoard().lowerNeighbor(lowerNeighbor);
+                            if (lowerNeighbor.getColor() != 6) {
+                                points += 1;
+                                lowerNeighbor = myGame.getMyTryoutBoard().lowerNeighbor(lowerNeighbor);
+                                if (lowerNeighbor.getColor() != 6) {
+                                    points += 1;
+                                    lowerNeighbor = myGame.getMyTryoutBoard().lowerNeighbor(lowerNeighbor);
+                                    if (lowerNeighbor.getColor() != 6) {
+                                        points += 1;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    me = myGame.getMyTryoutBoard().rightNeighbor(me);
+                    mes += 1;
+                    System.out.println("mes:" + mes);
+                    if (mes > moves.size()) {
+                        points += mes - moves.size();
+                    }
                 }
             }
+            if (myGame.getMyBoard().getQwirkles() < myGame.getMyTryoutBoard().getQwirkles()) {
+                points += 6;
+            }
+            return points;
         }
-        if (myGame.getMyBoard().getQwirkles() < myGame.getMyTryoutBoard().getQwirkles()) {
-            points += 6;
+        catch (IllegalMoveException e) {
+            e.printStackTrace();
+            return -1;
         }
-        return points;
     }
 }

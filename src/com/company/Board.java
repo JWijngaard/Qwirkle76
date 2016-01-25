@@ -164,6 +164,7 @@ public class Board {
     public boolean checkLegalSituation() throws IllegalMoveException {
         boolean LegalSituationRows = true;
         boolean LegalSituationColumns = true;
+        qwirkles = 0;
         //First we will check rows, based on color. (left to right)
         for(int i = 0; i < board.length - 1; i++) {
             for (int j = 0; j < board[i].length - 1; j++) {
@@ -225,26 +226,27 @@ public class Board {
                 if (me.getShape() == rightNeighbor(me).getShape() && me.getShape() != 6 && me.getColor() != rightNeighbor(me).getColor()) {
                     int rightShape = me.getShape();
                     ArrayList<Integer> colors = new ArrayList<Integer>();
-                    colors.add(me.getShape());
+                    colors.add(me.getColor());
                     me = rightNeighbor(me);
                     if (currentLegalSituation == false) {
                         currentLegalSituation = true;
                     }
-                    if (rightShape == rightNeighbor(me).getShape() && !colors.contains(me.getShape())) {
-                        colors.add(me.getShape());
+                    if (rightShape == rightNeighbor(me).getShape() && !colors.contains(me.getColor())) {
+                        colors.add(me.getColor());
                         me = rightNeighbor(me);
-                        if (rightShape == rightNeighbor(me).getShape() && !colors.contains(me.getShape())) {
-                            colors.add(me.getShape());
+                        if (rightShape == rightNeighbor(me).getShape() && !colors.contains(me.getColor())) {
+                            colors.add(me.getColor());
                             me = rightNeighbor(me);
-                            if (rightShape == rightNeighbor(me).getShape() && !colors.contains(me.getShape())) {
-                                colors.add(me.getShape());
+                            if (rightShape == rightNeighbor(me).getShape() && !colors.contains(me.getColor())) {
+                                colors.add(me.getColor());
                                 me = rightNeighbor(me);
-                                if (rightShape == rightNeighbor(me).getShape() && !colors.contains(me.getShape())) {
-                                    colors.add(me.getShape());
+                                if (rightShape == rightNeighbor(me).getShape() && !colors.contains(me.getColor())) {
+                                    colors.add(me.getColor());
                                     me = rightNeighbor(me);
-                                    if (rightShape == rightNeighbor(me).getShape() && !colors.contains(me.getShape())) {
-                                        colors.add(me.getShape());
+                                    if (rightShape == rightNeighbor(me).getShape() && !colors.contains(me.getColor())) {
+                                        colors.add(me.getColor());
                                         me = rightNeighbor(me);
+                                        qwirkles += 1;
                                     }
                                     else if (me.getShape() == 6 || rightNeighbor(me).getShape() == 6) {
 
@@ -355,26 +357,27 @@ public class Board {
                 if (me.getShape() == lowerNeighbor(me).getShape() && me.getShape() != 6 && me.getColor() != lowerNeighbor(me).getColor()) {
                     int rightShape = me.getShape();
                     ArrayList<Integer> colors = new ArrayList<Integer>();
-                    colors.add(me.getShape());
+                    colors.add(me.getColor());
                     me = lowerNeighbor(me);
                     if (currentLegalSituation == false) {
                         currentLegalSituation = true;
                     }
-                    if (rightShape == lowerNeighbor(me).getShape() && !colors.contains(me.getShape())) {
-                        colors.add(me.getShape());
+                    if (rightShape == lowerNeighbor(me).getShape() && !colors.contains(me.getColor())) {
+                        colors.add(me.getColor());
                         me = lowerNeighbor(me);
-                        if (rightShape == lowerNeighbor(me).getShape() && !colors.contains(me.getShape())) {
-                            colors.add(me.getShape());
+                        if (rightShape == lowerNeighbor(me).getShape() && !colors.contains(me.getColor())) {
+                            colors.add(me.getColor());
                             me = lowerNeighbor(me);
-                            if (rightShape == lowerNeighbor(me).getShape() && !colors.contains(me.getShape())) {
-                                colors.add(me.getShape());
+                            if (rightShape == lowerNeighbor(me).getShape() && !colors.contains(me.getColor())) {
+                                colors.add(me.getColor());
                                 me = lowerNeighbor(me);
-                                if (rightShape == lowerNeighbor(me).getShape() && !colors.contains(me.getShape())) {
-                                    colors.add(me.getShape());
+                                if (rightShape == lowerNeighbor(me).getShape() && !colors.contains(me.getColor())) {
+                                    colors.add(me.getColor());
                                     me = lowerNeighbor(me);
-                                    if (rightShape == lowerNeighbor(me).getShape() && !colors.contains(me.getShape())) {
-                                        colors.add(me.getShape());
+                                    if (rightShape == lowerNeighbor(me).getShape() && !colors.contains(me.getColor())) {
+                                        colors.add(me.getColor());
                                         me = lowerNeighbor(me);
+                                        qwirkles += 1;
                                     }
                                     else if (me.getShape() == 6 || lowerNeighbor(me).getShape() == 6) {
 

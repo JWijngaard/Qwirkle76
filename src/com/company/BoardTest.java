@@ -10,16 +10,6 @@ import static org.junit.Assert.*;
  */
 public class BoardTest {
 
-//    @org.junit.Before
-//    public void setUp() throws Exception {
-//        Board testBoard = new Board();
-//    }
-
-//    @org.junit.After
-//    public void tearDown() throws Exception {
-//
-//    }
-
 
     @org.junit.Test
     public void testLeftNeighbor() throws Exception {
@@ -89,6 +79,7 @@ public class BoardTest {
         testBoard.makeMove(0,5,1,4,1);
         System.out.println(testBoard.checkLegalSituation());
         testBoard.makeMove(0,5,4,2,1);
+        testBoard.makeMove(5,3,3,4,1);
         System.out.println(testBoard.checkLegalSituation());
         testBoard.makeMove(5,4,3,3,1);
         System.out.println(testBoard.checkLegalSituation());
