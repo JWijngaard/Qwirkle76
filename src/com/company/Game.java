@@ -1,15 +1,17 @@
 package com.company;
 
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by Jelle on 12/01/16.
  */
 public class Game {
-    private ArrayList<Player> myPlayers;
+    private ArrayList<Player> myPlayers = new ArrayList<Player>();
     private Board myBoard;
     private Board myTryoutBoard;
-    private ArrayList<Tile> bagOfStones;
+    private ArrayList<Tile> bagOfStones = new ArrayList<>();
 
     public Game(ArrayList<Player> myPlayers) {
         myBoard = new Board();
@@ -28,6 +30,20 @@ public class Game {
                     k++;
                 }
             }
+        }
+    }
+
+    public void distributeTiles() {
+        for (int i = 0; i < myPlayers.size(); i++) {
+            Player thisPlayer = myPlayers.get(i);
+            CopyOnWriteArrayList<Tile> newHand = new CopyOnWriteArrayList<>();
+            for (int k = 0; k < 6; k++) {
+                Random randomGenerator = new Random();
+                int j = randomGenerator.nextInt(bagOfStones.size());
+                newHand.add(bagOfStones.get(j));
+                bagOfStones.remove(j);
+            }
+            thisPlayer.setMyHand(newHand);
         }
     }
 
