@@ -1,5 +1,6 @@
 package com.company;
 
+import com.company.Exceptions.IllegalMoveException;
 import com.company.Exceptions.TileAlreadyPlacedException;
 import org.junit.Test;
 
@@ -66,22 +67,22 @@ public class BoardTest {
     public void testCheckLegalSituationActuallyLegal() throws Exception {
         Board testBoard = new Board();
         System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(1,5,1,1,1);
+        testBoard.makeMove(1, 5, 1, 1, 1);
         System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(2,5,1,2,1);
+        testBoard.makeMove(2, 5, 1, 2, 1);
         System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(3,5,1,3,1);
+        testBoard.makeMove(3, 5, 1, 3, 1);
         System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(4,5,2,2,1);
+        testBoard.makeMove(4, 5, 2, 2, 1);
         System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(5,5,3,2,1);
+        testBoard.makeMove(5, 5, 3, 2, 1);
         System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(0,5,1,4,1);
+        testBoard.makeMove(0, 5, 1, 4, 1);
         System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(0,5,4,2,1);
-        testBoard.makeMove(5,3,3,4,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(5,4,3,3,1);
+        testBoard.makeMove(0, 5, 4, 2, 1);
+        System.out.println(testBoard.toString());
+        testBoard.makeMove(5, 3, 3, 4, 1);
+        testBoard.makeMove(5, 4, 3, 3, 1);
         System.out.println(testBoard.checkLegalSituation());
         System.out.println(testBoard.toString());
         assertEquals(true, testBoard.checkLegalSituation());
@@ -90,155 +91,202 @@ public class BoardTest {
     @Test
     public void testCheckLegalSituationActuallyLegal2() throws Exception {
         Board testBoard = new Board();
-        testBoard.makeMove(2,2,1,2,1);
-        testBoard.makeMove(3,2,1,3,1);
+        testBoard.makeMove(2, 2, 1, 2, 1);
+        testBoard.makeMove(3, 2, 1, 3, 1);
+        testBoard.makeMove(4, 2, 1, 4, 1);
+        testBoard.makeMove(2, 1, 2, 2, 1);
+        testBoard.makeMove(2, 3, 3, 2, 1);
+        testBoard.makeMove(2, 5, 0, 2, 1);
+        assertEquals(true, testBoard.checkLegalSituation());
+    }
+
+    @Test
+    public void testCheckLegalSituationActuallyLegal3() throws Exception {
+        Board testBoard = new Board();
+        testBoard.makeMove(2,0,0,4,1);
+        testBoard.makeMove(2,1,1,4,1);
+        testBoard.makeMove(2,2,2,4,1);
+        testBoard.makeMove(2,3,3,4,1);
+        testBoard.makeMove(2,4,4,4,1);
+        testBoard.makeMove(2,5,5,4,1);
+        assertEquals(true, testBoard.checkLegalSituation());
+    }
+
+    @Test
+    public void testCheckLegalSituationActuallyLegal4() throws Exception {
+        Board testBoard = new Board();
+        testBoard.makeMove(0,2,0,4,1);
         testBoard.makeMove(4,2,1,4,1);
-        testBoard.makeMove(2,1,2,2,1);
-        testBoard.makeMove(2,3,3,2,1);
-        testBoard.makeMove(2,5,0,2,1);
+        testBoard.makeMove(5,2,2,4,1);
+        testBoard.makeMove(1,2,3,4,1);
+        testBoard.makeMove(2,2,4,4,1);
         assertEquals(true, testBoard.checkLegalSituation());
     }
 
     @Test
     public void testCheckLegalSituationNotLegalSameNeighbor() throws Exception {
-        Board testBoard = new Board();
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(1,5,0,0,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(1,5,0,1,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(3,5,0,2,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(4,5,1,1,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(5,5,2,1,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(0,5,0,3,1);
-        System.out.println(testBoard.checkLegalSituation());
-        System.out.println(testBoard.toString());
-        assertEquals(false, testBoard.checkLegalSituation());
+        try {
+            Board testBoard = new Board();
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(1, 5, 0, 0, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(1, 5, 0, 1, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(3, 5, 0, 2, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(4, 5, 1, 1, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(5, 5, 2, 1, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(0, 5, 0, 3, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            System.out.println(testBoard.toString());
+            assertEquals(false, testBoard.checkLegalSituation());
+        }
+        catch (IllegalMoveException e) {
+        }
     }
 
     @Test
     public void testCheckLegalSituationNotLegalDifferentColorNeighbor() throws Exception {
-        Board testBoard = new Board();
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(1,5,1,1,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(2,5,1,2,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(3,4,1,3,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(4,5,2,2,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(5,5,3,2,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(0,5,1,4,1);
-        System.out.println(testBoard.checkLegalSituation());
-        System.out.println(testBoard.toString());
-        assertEquals(false, testBoard.checkLegalSituation());
+        try {
+            Board testBoard = new Board();
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(1, 5, 1, 1, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(2, 5, 1, 2, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(3, 4, 1, 3, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(4, 5, 2, 2, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(5, 5, 3, 2, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(0, 5, 1, 4, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            System.out.println(testBoard.toString());
+            assertEquals(false, testBoard.checkLegalSituation());
+        }
+        catch (IllegalMoveException e) {
+        }
     }
 
     @Test
     public void testCheckLegalSituationNotLegalDifferentShapeNeighbor() throws Exception {
-        Board testBoard = new Board();
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(1,5,1,1,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(2,5,1,2,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(3,5,1,3,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(4,5,2,2,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(5,5,3,2,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(0,5,1,4,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(0,5,4,2,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(5,4,3,3,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(4,3,3,4,1);
-        System.out.println(testBoard.checkLegalSituation());
-        System.out.println(testBoard.toString());
-        assertEquals(false, testBoard.checkLegalSituation());
+        try {
+            Board testBoard = new Board();
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(1, 5, 1, 1, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(2, 5, 1, 2, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(3, 5, 1, 3, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(4, 5, 2, 2, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(5, 5, 3, 2, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(0, 5, 1, 4, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(0, 5, 4, 2, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(5, 4, 3, 3, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(4, 3, 3, 4, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            System.out.println(testBoard.toString());
+            assertEquals(false, testBoard.checkLegalSituation());
+        }
+        catch (IllegalMoveException e) {
+        }
     }
 
     @Test
     public void testCheckLegalSituationNotLegalDifferentColorInColumn() throws Exception {
-        Board testBoard = new Board();
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(1,5,1,1,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(2,5,1,2,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(3,5,1,3,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(4,5,2,2,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(5,5,3,2,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(0,5,1,4,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(0,5,4,2,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(5,4,3,3,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(3,4,5,2,1);
-        System.out.println(testBoard.checkLegalSituation());
-        System.out.println(testBoard.toString());
-        assertEquals(false, testBoard.checkLegalSituation());
+        try {
+            Board testBoard = new Board();
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(1, 5, 1, 1, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(2, 5, 1, 2, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(3, 5, 1, 3, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(4, 5, 2, 2, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(5, 5, 3, 2, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(0, 5, 1, 4, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(0, 5, 4, 2, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(5, 4, 3, 3, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(3, 4, 5, 2, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            System.out.println(testBoard.toString());
+            assertEquals(false, testBoard.checkLegalSituation());
+        }
+        catch (IllegalMoveException e) {
+        }
     }
 
     @Test
     public void testCheckLegalSituationNotLegalSameTileInColumn() throws Exception {
-        Board testBoard = new Board();
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(1,5,1,1,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(2,5,1,2,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(3,5,1,3,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(4,5,2,2,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(5,5,3,2,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(0,5,1,4,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(0,5,4,2,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(5,4,3,3,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(0,5,5,2,1);
-        System.out.println(testBoard.checkLegalSituation());
-        System.out.println(testBoard.toString());
-        assertEquals(false, testBoard.checkLegalSituation());
+        try {
+            Board testBoard = new Board();
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(1, 5, 1, 1, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(2, 5, 1, 2, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(3, 5, 1, 3, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(4, 5, 2, 2, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(5, 5, 3, 2, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(0, 5, 1, 4, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(0, 5, 4, 2, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(5, 4, 3, 3, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(0, 5, 5, 2, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            System.out.println(testBoard.toString());
+            assertEquals(false, testBoard.checkLegalSituation());
+        }
+        catch (IllegalMoveException e) {
+        }
     }
 
     @Test
     public void testCheckLegalSituationNotLegalTileIsAlone() throws Exception {
-        Board testBoard = new Board();
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(1,5,1,1,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(2,5,1,2,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(3,5,1,3,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(4,5,2,2,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(5,5,3,2,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(0,5,1,4,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(0,5,4,2,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(5,4,3,3,1);
-        System.out.println(testBoard.checkLegalSituation());
-        testBoard.makeMove(1,1,11,11,1);
-        System.out.println(testBoard.toString());
-        assertEquals(false, testBoard.checkLegalSituation());
+        try {
+            Board testBoard = new Board();
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(1, 5, 1, 1, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(2, 5, 1, 2, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(3, 5, 1, 3, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(4, 5, 2, 2, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(5, 5, 3, 2, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(0, 5, 1, 4, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(0, 5, 4, 2, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(5, 4, 3, 3, 1);
+            System.out.println(testBoard.checkLegalSituation());
+            testBoard.makeMove(1, 1, 11, 11, 1);
+            System.out.println(testBoard.toString());
+            assertEquals(false, testBoard.checkLegalSituation());
+        }
+        catch (IllegalMoveException e) {
+        }
     }
 }
