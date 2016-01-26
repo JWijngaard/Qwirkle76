@@ -1,5 +1,6 @@
 package com.company;
 
+import com.company.Exceptions.IllegalMoveException;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -28,6 +29,11 @@ public class PlayerTest {
     Move move14 = new Move(2,2,4,4);
     Move move15 = new Move(3,2,5,4);
     Move move17 = new Move(5,2,2,4);
+    Move move18 = new Move(1,4,4,3);
+    Move move19 = new Move(0,4,4,4);
+    Move move20 = new Move(3,4,4,5);
+    Move move21 = new Move(4,4,4,6);
+    Move move22 = new Move(5,4,4,7);
 
     @Test
     public void testSameRowAndTestSameColumn() throws Exception {
@@ -92,5 +98,28 @@ public class PlayerTest {
         myMoves.clear();
         myMoves.add(move15);
         assertEquals(17, testPlayer.makeMoveGetPoints(myMoves));
+    }
+
+    @Test
+    public void testMakeMoveGetPoints2() throws Exception {
+        Player testPlayer = new Player("Pieter");
+        ArrayList<Player> players = new ArrayList<Player>();
+        players.add(testPlayer);
+        Game myTestGame = new Game(players);
+        testPlayer.setMyGame(myTestGame);
+        myMoves.clear();
+        myMoves.add(move8);
+        assertEquals(1, testPlayer.makeMoveGetPoints(myMoves));
+        myMoves.clear();
+        myMoves.add(move7);
+        assertEquals(2, testPlayer.makeMoveGetPoints(myMoves));
+        assertEquals(-1, testPlayer.makeMoveGetPoints(myMoves));
+        myMoves.clear();
+        myMoves.add(move18);
+        myMoves.add(move19);
+        myMoves.add(move20);
+        myMoves.add(move21);
+        myMoves.add(move22);
+        assertEquals(14, testPlayer.makeMoveGetPoints(myMoves));
     }
 }
