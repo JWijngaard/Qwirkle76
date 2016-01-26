@@ -356,25 +356,13 @@ public class ServerController extends Thread {
         }
     }
     public void sendToClientMessage(String message, Socket socket) {
-                PrintStream outToClient;
-                try {
-                    outToClient = new PrintStream(socket.getOutputStream());
-                    outToClient.println(message);
-                } catch (IOException e) {
-                    serverView.logMessage("Caught an IO exception trying to send to TCP connections");
-                    e.printStackTrace();
-                }
-            }
+        PrintStream outToClient;
+        try {
+            outToClient = new PrintStream(socket.getOutputStream());
+            outToClient.println(message);
+        } catch (IOException e) {
+            serverView.logMessage("Caught an IO exception trying to send to TCP connections");
+            e.printStackTrace();
+        }
     }
-
-
-
-
-
-
-
-
-
-
-
-
+}
