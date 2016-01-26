@@ -61,42 +61,42 @@ public class ClientController {
                 System.out.println(response); //This has to go! after we finish
                 // TODO:  Parser
                 List<String> words = Arrays.asList((response.split("\\s+")));
-                if (words.get(0).equals("error")) {
-                    if(words.get(1).isEmpty()){
-                        tuiView.logMessage(words.get(0));
-                        //TODO: Do something
-                    }else if(words.get(1).equals("0")){
-                        tuiView.logMessage(words.get(0) + " " +  words.get(1));
-                        //TODO: Do something
-                    }
-                    else if(words.get(1).equals("1")){
-                        tuiView.logMessage(words.get(0) + " " + words.get(1));
-                        //TODO: Do something
-
-                    }else if(words.get(1).equals("2")){
-                        tuiView.logMessage(words.get(0) + " " + words.get(1));
-                        //TODO: Do something
-                    }else if(words.get(1).equals("3")) {
-                        tuiView.logMessage(words.get(0) + " " + words.get(1));
-                        //TODO: Do something
-                    }else if(words.get(1).equals("4")) {
-                        tuiView.logMessage(words.get(0) + " " + words.get(1));
-                        //TODO: Do something
-                    }else {
-                        //TODO: Do something
-                    }
-
-                }else if(words.get(0).equals("endgame")) {
-                    //TODO: End game
-                }else if (words.get(0).equals("turn")) {
-                    if(words.get(1).equals(playername)){
-                        System.out.println("Its your Turn please make a move!");
-                        //TODO: Your turn
-                    }
-                    //TODO: give turn to client
-                } else if (words.get(0).equals("")) {
-
-                }
+//                if (words.get(0).equals("error")) {
+//                    if(words.get(1).isEmpty()){
+//                        tuiView.logMessage(words.get(0));
+//                        //TODO: Do something
+//                    }else if(words.get(1).equals("0")){
+//                        tuiView.logMessage(words.get(0) + " " +  words.get(1));
+//                        //TODO: Do something
+//                    }
+//                    else if(words.get(1).equals("1")){
+//                        tuiView.logMessage(words.get(0) + " " + words.get(1));
+//                        //TODO: Do something
+//
+//                    }else if(words.get(1).equals("2")){
+//                        tuiView.logMessage(words.get(0) + " " + words.get(1));
+//                        //TODO: Do something
+//                    }else if(words.get(1).equals("3")) {
+//                        tuiView.logMessage(words.get(0) + " " + words.get(1));
+//                        //TODO: Do something
+//                    }else if(words.get(1).equals("4")) {
+//                        tuiView.logMessage(words.get(0) + " " + words.get(1));
+//                        //TODO: Do something
+//                    }else {
+//                        //TODO: Do something
+//                    }
+//
+//                }else if(words.get(0).equals("endgame")) {
+//                    //TODO: End game
+//                }else if (words.get(0).equals("turn")) {
+//                    if(words.get(1).equals(playername)){
+//                        System.out.println("Its your Turn please make a move!");
+//                        //TODO: Your turn
+//                    }
+//                    //TODO: give turn to client
+//                } else if (words.get(0).equals("")) {
+//
+//                }
                 outServer.flush();
                 line = out.readLine();
 
