@@ -6,6 +6,7 @@ import com.company.Exceptions.TileAlreadyPlacedException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by Jelle on 12/01/16.
@@ -84,12 +85,12 @@ public class Board {
                         string += "*";
                     }
                 } else {
-                    string += "S";
+                    string += " ";
                 }
                 if ((board[i][j].getColor() != 6)) {
                     string += "" + board[i][j].getColor() + "|";
                 } else {
-                    string += "C|";
+                    string += " |";
                 }
             } string += "\n";
             string += " |";

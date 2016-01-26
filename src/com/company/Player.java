@@ -1,10 +1,11 @@
 package com.company;
 
-import com.company.Exceptions.IllegalMoveException;
-import com.company.Exceptions.TileAlreadyPlacedException;
-import com.company.Exceptions.TilesNotInSameRowOrColumnException;
+import com.company.Exceptions.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by Jelle on 13/01/16.
@@ -12,7 +13,151 @@ import java.util.ArrayList;
 public class Player {
     private int score;
     private String name;
-    private Game myGame;
+    protected static Game myGame;
+    private TUIView myView = new TUIView();
+    private CopyOnWriteArrayList<Tile> myHand = new CopyOnWriteArrayList<Tile>();
+
+    public static void main(String[] args) {
+        Player test = new Player("pieter");
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(test);
+        myGame = new Game(players);
+        myGame.fillMyBag();
+        myGame.distributeTiles();
+        test.setScore(test.makeMoveGetPoints(test.askForMove()) + test.getScore());
+        System.out.println(myGame.getMyBoard().toString());
+        System.out.println(test.getScore());
+        test.setScore(test.makeMoveGetPoints(test.askForMove()) + test.getScore());
+        System.out.println(myGame.getMyBoard().toString());
+        System.out.println(test.getScore());
+        test.setScore(test.makeMoveGetPoints(test.askForMove()) + test.getScore());
+        System.out.println(myGame.getMyBoard().toString());
+        System.out.println(test.getScore());
+    }
+
+    public void setMyHand(CopyOnWriteArrayList<Tile> myHand) {
+        this.myHand = myHand;
+    }
+
+    public void tradeTiles(ArrayList<Tile> tilesToTrade) throws NotEnoughTilesInBagException, DontHaveTileException {
+        boolean allInHand = true;
+        for (Tile tile : tilesToTrade) {
+            if (!myHand.contains(tile)) {
+                allInHand = false;
+            }
+        }
+        if (allInHand) {
+            myGame.addNewTiles(this, tilesToTrade.size());
+            for (Tile tile : tilesToTrade) {
+                myHand.remove(tile);
+            }
+        } else {
+            throw new DontHaveTileException("Don't cheat: you can't trade tiles you don't own.");
+        }
+    }
+
+    public String myHandToString() {
+        String result = " ";
+        for (Tile z : myHand) {
+            if (z.getShape() == 0) {
+                result += "!";
+            }
+            else if (z.getShape() == 1) {
+                result += "@";
+            }
+            else if (z.getShape() == 2) {
+                result += "#";
+            }
+            else if (z.getShape() == 3) {
+                result += "$";
+            }
+            else if (z.getShape() == 4) {
+                result += "%";
+            }
+            else if (z.getShape() == 5) {
+                result += "*";
+            }
+            result += z.getColor();
+            result += "(";
+            result += z.getShape();
+            result += ")";
+            result += " ";
+        }
+        return result;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public CopyOnWriteArrayList<Tile> getMyHand() {
+        return myHand;
+    }
+
+    public ArrayList<Tile> askForTrade() {
+        List<String> ints = new ArrayList<>();
+        myView.logMessage("The current board is as follows: \n" + myGame.getMyBoard().toString() + "\n");
+        myView.logMessage("Remember, you only have the following stones:" + myHandToString());
+        List<String> words = Arrays.asList((myView.askUserInput("What tiles would you like to trade? (s,c)").split("\\s+")));
+        for (String z : words) {
+            for (String s : z.split(",")) {
+                ints.add(s);
+            }
+        }
+        ArrayList<Tile> trades = new ArrayList<>();
+        while (!ints.isEmpty()) {
+            int s = Integer.parseInt(ints.get(0));
+            ints.remove(0);
+            int c = Integer.parseInt(ints.get(0));
+            ints.remove(0);
+            Tile newTile = new Tile(-100, -100);
+            newTile.setColor(c);
+            newTile.setShape(s);
+            trades.add(newTile);
+        }
+        return trades;
+    }
+
+    public void myTurn() {
+        String userInput = myView.askUserInput("Would you like to trade (enter t) or place (enter p) tiles?");
+        if (userInput == "t") {
+            askForTrade();
+        } else if (userInput == "p") {
+            askForMove();
+        } else {
+            System.out.println("Please do as you are asked: enter t or p.");
+            myTurn();
+        }
+    }
+
+    public ArrayList<Move> askForMove() {
+        List<String> ints = new ArrayList<>();
+        myView.logMessage("The current board is as follows: \n" + myGame.getMyBoard().toString() + "\n");
+        myView.logMessage("Remember, you only have the following stones:" + myHandToString());
+        List<String> words = Arrays.asList((myView.askUserInput("What move would you like to make? (s,c,x,y)").split("\\s+")));
+        for (String z : words) {
+            for (String s : z.split(",")) {
+                ints.add(s);
+            }
+        }
+        ArrayList<Move> moves = new ArrayList<>();
+        while (!ints.isEmpty()) {
+            int s = Integer.parseInt(ints.get(0));
+            ints.remove(0);
+            int c = Integer.parseInt(ints.get(0));
+            ints.remove(0);
+            int x = Integer.parseInt(ints.get(0));
+            ints.remove(0);
+            int y = Integer.parseInt(ints.get(0));
+            ints.remove(0);
+            moves.add(new Move(s,c,y,x));
+        }
+        return moves;
+    }
 
     public Player(String name) {
         this.name = name;
@@ -20,6 +165,10 @@ public class Player {
 
     public void setMyGame(Game myGame) {
         this.myGame = myGame;
+    }
+
+    public void addTileToHand(Tile tile) {
+        myHand.add(tile);
     }
 
     public boolean sameRow(ArrayList<Move> moves) {
@@ -51,7 +200,27 @@ public class Player {
         else throw new TilesNotInSameRowOrColumnException("I'm afraid I cannot let you do that. Place tiles only in 1 row or column.");
     }
 
+    public void checkTileInHand (Tile tile) throws DontHaveTileException {
+        for (Tile z : myHand) {
+            if (z.getShape() == tile.getShape() && z.getColor() == tile.getColor()) {
+                myHand.remove(z);
+                return;
+            }
+        }
+        throw new DontHaveTileException("You don't have this tile mate.");
+    }
+
     public int makeMoveGetPoints(ArrayList<Move> moves) {
+        for (Move z : moves) {
+            try {
+                checkTileInHand(z.getTileWithoutCoordinates());
+            }
+            catch (DontHaveTileException e) {
+                e.printStackTrace();
+                System.out.println(e.getMessage());
+                return -1;
+            }
+        }
         myGame.getMyTryoutBoard().increaseMove();
         int myPoints = 0;
         int atMove = myGame.getMyTryoutBoard().getAtMove();
@@ -94,6 +263,64 @@ public class Player {
             }
             return myPoints;
             }
+        catch (IllegalMoveException e) {
+            e.printStackTrace();
+            for(int i = 0; i < myGame.getMyTryoutBoard().getBoard().length; i++) {
+                for (int j = 0; j < myGame.getMyTryoutBoard().getBoard()[i].length; j++) {
+                    myGame.getMyTryoutBoard().getBoard()[i][j].setColor(myGame.getMyBoard().getBoard()[i][j].getColor());
+                    myGame.getMyTryoutBoard().getBoard()[i][j].setShape(myGame.getMyBoard().getBoard()[i][j].getShape());
+                }
+            }
+            return -1;
+        }
+    }
+
+    public int makeMoveGetPointsWithoutActuallyMakingTheMove(ArrayList<Move> moves) {
+        for (Move z : moves) {
+            try {
+                checkTileInHand(z.getTileWithoutCoordinates());
+            }
+            catch (DontHaveTileException e) {
+                System.out.println(e.getMessage());
+                return -1;
+            }
+        }
+        myGame.getMyTryoutBoard().increaseMove();
+        int myPoints = 0;
+        int atMove = myGame.getMyTryoutBoard().getAtMove();
+        try {
+            checkSameRowOrColumn(moves);
+            for (int i = 0; i < moves.size(); i++) {
+                try {
+                    myGame.getMyTryoutBoard().makeMove(moves.get(i).getShape(), moves.get(i).getColor(), moves.get(i).getC1(), moves.get(i).getC2(), atMove);
+                    System.out.println(myGame.getMyTryoutBoard().toString());
+                } catch (TileAlreadyPlacedException e) {
+                    System.out.println(e.getStackTrace());
+                    for(int k = 0; k < myGame.getMyTryoutBoard().getBoard().length; k++) {
+                        for (int j = 0; j < myGame.getMyTryoutBoard().getBoard()[k].length; j++) {
+                            myGame.getMyTryoutBoard().getBoard()[k][j].setColor(myGame.getMyBoard().getBoard()[k][j].getColor());
+                            myGame.getMyTryoutBoard().getBoard()[k][j].setShape(myGame.getMyBoard().getBoard()[k][j].getShape());
+                        }
+                    }
+                    return -1;
+                }
+            }
+        }
+        catch (TilesNotInSameRowOrColumnException e) {
+            System.out.println(e.getStackTrace());
+            return -1;
+        }
+        try {
+            myGame.getMyTryoutBoard().checkLegalSituation();
+            System.out.println("TESTOBAMA");
+            System.out.println(moves);
+            int myBoardQwirkles = myGame.getMyBoard().getQwirkles();
+            int myTryoutBoardQwirkles = myGame.getMyTryoutBoard().getQwirkles();
+            System.out.println(myBoardQwirkles + "" + myTryoutBoardQwirkles + "ZIJN DE QWIRKLES VAN BOARD EN TRYOUT");
+            int qwirkles = myGame.getMyTryoutBoard().getQwirkles() - myGame.getMyBoard().getQwirkles();
+            myPoints = calculatePoints(moves, qwirkles);
+            return myPoints;
+        }
         catch (IllegalMoveException e) {
             e.printStackTrace();
             for(int i = 0; i < myGame.getMyTryoutBoard().getBoard().length; i++) {

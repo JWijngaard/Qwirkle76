@@ -1,5 +1,7 @@
 package com.company;
 
+import java.util.ArrayList;
+
 /**
  * Created by Jelle on 12/01/16.
  */
@@ -16,6 +18,7 @@ public class Tile {
         shape = 6;
         color = 6;
     }
+
 
     public void setShape(int newShape) {
         shape = newShape;

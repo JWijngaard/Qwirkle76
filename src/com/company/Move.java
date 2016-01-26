@@ -16,6 +16,13 @@ public class Move {
         this.c2 = c2;
     }
 
+    public Tile getTileWithoutCoordinates() {
+        Tile tile = new Tile(-100, -100);
+        tile.setColor(color);
+        tile.setShape(shape);
+        return tile;
+    }
+
     public int getShape() {
         return shape;
     }
