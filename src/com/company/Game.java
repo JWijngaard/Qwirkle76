@@ -1,5 +1,7 @@
 package com.company;
 
+import com.company.Exceptions.NotEnoughTilesInBagException;
+
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -45,6 +47,18 @@ public class Game {
             }
             thisPlayer.setMyHand(newHand);
         }
+    }
+
+    public void addNewTiles(Player player, int amount) throws NotEnoughTilesInBagException {
+        if (!(bagOfStones.size() < amount)) {
+            for (int i = 0; i < amount; i++) {
+                Random randomGenerator = new Random();
+                int j = randomGenerator.nextInt(bagOfStones.size());
+                player.addTileToHand(bagOfStones.get(j));
+                bagOfStones.remove(j);
+            }
+        }
+        else throw new NotEnoughTilesInBagException("Sorry, not enough tiles left to trade. (bag empty or near empty)");
     }
 
     public ArrayList<Tile> getBagOfStones() {

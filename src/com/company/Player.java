@@ -1,9 +1,6 @@
 package com.company;
 
-import com.company.Exceptions.DontHaveTileException;
-import com.company.Exceptions.IllegalMoveException;
-import com.company.Exceptions.TileAlreadyPlacedException;
-import com.company.Exceptions.TilesNotInSameRowOrColumnException;
+import com.company.Exceptions.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,6 +37,23 @@ public class Player {
 
     public void setMyHand(CopyOnWriteArrayList<Tile> myHand) {
         this.myHand = myHand;
+    }
+
+    public void tradeTiles(ArrayList<Tile> tilesToTrade) throws NotEnoughTilesInBagException, DontHaveTileException {
+        boolean allInHand = true;
+        for (Tile tile : tilesToTrade) {
+            if (!myHand.contains(tile)) {
+                allInHand = false;
+            }
+        }
+        if (allInHand) {
+            myGame.addNewTiles(this, tilesToTrade.size());
+            for (Tile tile : tilesToTrade) {
+                myHand.remove(tile);
+            }
+        } else {
+            throw new DontHaveTileException("Don't cheat: you can't trade tiles you don't own.");
+        }
     }
 
     public String myHandToString() {
@@ -82,6 +96,42 @@ public class Player {
 
     public CopyOnWriteArrayList<Tile> getMyHand() {
         return myHand;
+    }
+
+    public ArrayList<Tile> askForTrade() {
+        List<String> ints = new ArrayList<>();
+        myView.logMessage("The current board is as follows: \n" + myGame.getMyBoard().toString() + "\n");
+        myView.logMessage("Remember, you only have the following stones:" + myHandToString());
+        List<String> words = Arrays.asList((myView.askUserInput("What tiles would you like to trade? (s,c)").split("\\s+")));
+        for (String z : words) {
+            for (String s : z.split(",")) {
+                ints.add(s);
+            }
+        }
+        ArrayList<Tile> trades = new ArrayList<>();
+        while (!ints.isEmpty()) {
+            int s = Integer.parseInt(ints.get(0));
+            ints.remove(0);
+            int c = Integer.parseInt(ints.get(0));
+            ints.remove(0);
+            Tile newTile = new Tile(-100, -100);
+            newTile.setColor(c);
+            newTile.setShape(s);
+            trades.add(newTile);
+        }
+        return trades;
+    }
+
+    public void myTurn() {
+        String userInput = myView.askUserInput("Would you like to trade (enter t) or place (enter p) tiles?");
+        if (userInput == "t") {
+            askForTrade();
+        } else if (userInput == "p") {
+            askForMove();
+        } else {
+            System.out.println("Please do as you are asked: enter t or p.");
+            myTurn();
+        }
     }
 
     public ArrayList<Move> askForMove() {
