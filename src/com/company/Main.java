@@ -9,8 +9,8 @@ public class Main {
             System.out.println(args[0]);
             if (args[0].equals("-S") || args[0].equals("-s")) {
                 System.out.println("Now starting Qwirkle76 game server!");
-                ServerController myServerController = new ServerController();
-                myServerController.start();
+//                ServerController myServerController = new ServerController();
+//                ServerThread.start();
             } else if (args[0] == "-G" || args[0] == "-g") {
                 System.out.println("Now starting Qwirkle76 game client in GUI mode!");
             } else if (args[0] == "-T" || args[0] == "-t") {

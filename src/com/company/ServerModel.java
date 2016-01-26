@@ -7,34 +7,25 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by Jelle on 12/01/16.
+ * Created by JulianStellaard on 26/01/16.
  */
 public class ServerModel {
-
+    List<String> myList;
+    private List<Socket> clients;
     private Map<String, Socket> playerClientID;
     private Map<Socket, String> clientIDPlayer;
-    Map<String, Socket> lobbyTwo;
-    Map<String, Socket> lobbyThree;
-    Map<String, Socket> lobbyFour;
-    private List<Socket> clients;
+    List<Socket> lobbyTwo;
+    List<Socket> lobbyThree;
+    List<Socket> lobbyFour;
 
     public ServerModel() {
+        myList = new ArrayList<>();
+        clients = new ArrayList<>();
         playerClientID = new HashMap<>();
         clientIDPlayer = new HashMap<>();
-        lobbyTwo = new HashMap<>();
-        lobbyThree = new HashMap<>();
-        lobbyFour = new HashMap<>();
-        clients = new ArrayList<>();
-    }
-
-    public Map<String, Socket> getLobbyClientIDTwo() {
-        return lobbyTwo;
-    }
-    public Map<String, Socket> getLobbyClientIDThree() {
-        return lobbyThree;
-    }
-    public Map<String, Socket> getLobbyClientIDFour() {
-        return lobbyFour;
+        lobbyTwo = new ArrayList<>();
+        lobbyThree = new ArrayList<>();
+        lobbyFour = new ArrayList<>();
     }
 
     public List<Socket> getClientList() {
@@ -52,5 +43,15 @@ public class ServerModel {
     public String getPlayerName(Socket socket) {
         String playerName = clientIDPlayer.get(socket);
         return playerName;
+    }
+
+    public List<Socket> getLobbyClientIDTwo() {
+        return lobbyTwo;
+    }
+    public List<Socket> getLobbyClientIDThree() {
+        return lobbyThree;
+    }
+    public List<Socket> getLobbyClientIDFour() {
+        return lobbyFour;
     }
 }

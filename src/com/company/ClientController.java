@@ -1,122 +1,102 @@
 package com.company;
 
+import com.company.Exceptions.WrongCommandoException;
+
 import java.io.*;
-import java.net.*;
+import java.net.Socket;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Created by JulianStellaard on 26/01/16.
+ */
 public class ClientController {
-    public static void main(String args[]) throws IOException{
 
-        InetAddress address = InetAddress.getByName(args[0]);
-        TUIView tuiView = new TUIView();
-        Socket socketOne = null;
-        String line;
-        BufferedReader out = null;
-        BufferedReader in = null;
-        PrintWriter outServer = null;
-        String response;
-        int portNumber;
-        int port;
-        String playername = null;
+    TUIView clientView = new TUIView();
+    protected int port;
+    protected String IPAdress;
+    protected Socket socket = null;
+    protected BufferedReader inSer;
+    protected BufferedReader inOwn;
+    protected PrintWriter outSer;
 
+    public ClientController() throws IOException, WrongCommandoException {
+        port = askUserInputPort();
+        IPAdress = askUserInputAddress();
         try {
-            while(true)
-                try {
-                    Scanner kb = new Scanner(System.in);
-                    tuiView.logMessage("Please enter the portnumber: ");
-                    port = Integer.parseInt(kb.nextLine());
-                    tuiView.logMessageInt("The choosen portNumber is: ", port);
-                    portNumber = port;
-                    break;
-                } catch (NumberFormatException nfe) {
-                    tuiView.logMessage("The choosen portnumber is not valid");
-                }
-            socketOne = new Socket(address, portNumber);
-            out = new BufferedReader(new InputStreamReader(System.in));
-            in = new BufferedReader(new InputStreamReader(socketOne.getInputStream()));
-            outServer = new PrintWriter(socketOne.getOutputStream());
+            socket = new Socket(IPAdress, port);
+        } catch (IOException e) {
+            System.out.println("ERROR: could not create a socket on " + IPAdress + " and port " + port);
         }
-        catch (IOException e){
-            e.printStackTrace();
-            System.err.print("IO Exception");
-        }
-        tuiView.logMessage("Client Address : " + address);
-        try{
-            line = out.readLine();
-            List<String> clientName = Arrays.asList((line.split("\\s+")));
-            if(clientName.get(0).equals("hello")) {
-                playername = clientName.get(1);
-            }
-            while(line != null){
+        run();
+    }
+
+    public int askUserInputPort() {
+        clientView.logMessage("Please enter the portnumber:");
+        Scanner userInputScanner = new Scanner(System.in);
+        int port = 0;
+        while (port == 0) {
+            if (userInputScanner.hasNext()) {
                 try {
-                    Thread.sleep(100);
-                } catch(InterruptedException ex) {
-                    Thread.currentThread().interrupt();
+                    port = Integer.parseInt(userInputScanner.nextLine());
+                } catch (NumberFormatException e) {
+                    System.out.println("ERROR: port " + userInputScanner + " is not an integer");
+                    System.exit(0);
                 }
-                outServer.println(line);
-                outServer.flush();
-                response = in.readLine();
-                System.out.println(response); //This has to go! after we finish
-                // TODO:  Parser
-                List<String> words = Arrays.asList((response.split("\\s+")));
-//                if (words.get(0).equals("error")) {
-//                    if(words.get(1).isEmpty()){
-//                        tuiView.logMessage(words.get(0));
-//                        //TODO: Do something
-//                    }else if(words.get(1).equals("0")){
-//                        tuiView.logMessage(words.get(0) + " " +  words.get(1));
-//                        //TODO: Do something
-//                    }
-//                    else if(words.get(1).equals("1")){
-//                        tuiView.logMessage(words.get(0) + " " + words.get(1));
-//                        //TODO: Do something
-//
-//                    }else if(words.get(1).equals("2")){
-//                        tuiView.logMessage(words.get(0) + " " + words.get(1));
-//                        //TODO: Do something
-//                    }else if(words.get(1).equals("3")) {
-//                        tuiView.logMessage(words.get(0) + " " + words.get(1));
-//                        //TODO: Do something
-//                    }else if(words.get(1).equals("4")) {
-//                        tuiView.logMessage(words.get(0) + " " + words.get(1));
-//                        //TODO: Do something
-//                    }else {
-//                        //TODO: Do something
-//                    }
-//
-//                }else if(words.get(0).equals("endgame")) {
-//                    //TODO: End game
-//                }else if (words.get(0).equals("turn")) {
-//                    if(words.get(1).equals(playername)){
-//                        System.out.println("Its your Turn please make a move!");
-//                        //TODO: Your turn
-//                    }
-//                    //TODO: give turn to client
-//                } else if (words.get(0).equals("")) {
-//
-//                }
-                outServer.flush();
-                line = out.readLine();
-
-                if(line.equals("Quit")){
-                    break;
-                }
-
             }
         }
-        catch(IOException e){
-            e.printStackTrace();
-            tuiView.logMessage("Socket read Error");
-        }
-        finally{
-            in.close();
-            outServer.close();
-            out.close();
-            socketOne.close();
-            tuiView.logMessage("Connection Closed");
-        }
+        clientView.logMessageInt("The choosen portNumber is: ", port);
+        return port;
+    }
 
+    public String askUserInputAddress() {
+        clientView.logMessage("Please enter the IP-Adress:");
+        Scanner userInputScanner = new Scanner(System.in);
+        String message = "";
+        while (message.equals("")) {
+            if (userInputScanner.hasNext()) {
+                try {
+                    message = userInputScanner.nextLine();
+                } catch (NumberFormatException e) {
+                    System.out.println("ERROR: IP-Adress " + userInputScanner + " is not vallid");
+                    System.exit(0);
+                }
+            }
+        }
+        clientView.logMessage("The choosen IP-Adress is: " + message);
+        return message;
+    }
+
+    public void run() throws IOException, WrongCommandoException {
+        inOwn = new BufferedReader(new InputStreamReader(System.in));
+        inSer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        outSer = new PrintWriter(socket.getOutputStream());
+        try {
+            String messageOut = "hello julian";
+            outSer.println(messageOut);
+            outSer.flush();
+        }catch (Exception e) {
+            throw new WrongCommandoException("error 2");
+        }
+        try {
+            System.out.println(inSer.readLine());
+            String message = inSer.readLine();
+            while (message != null) {
+                System.out.println(message);
+                String ownMessage = inOwn.readLine();
+                outSer.println(ownMessage);
+                outSer.flush();
+                message = inSer.readLine();
+            }
+            ServerThread.shutDown();
+        } catch (IOException e) {
+            e.printStackTrace();
+            ServerThread.shutDown();
+        }
+    }
+
+    public static void main(String[] args) throws IOException, WrongCommandoException {
+        ClientController c = new ClientController();
     }
 }
