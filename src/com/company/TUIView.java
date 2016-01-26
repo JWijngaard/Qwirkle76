@@ -1,5 +1,7 @@
 package com.company;
 
+import java.util.Scanner;
+
 /**
  * Created by Jelle on 12/01/16.
  */
@@ -17,5 +19,17 @@ public class TUIView {
 
     public void logInt(int messageInt){
         System.out.println("Client: " + messageInt);
+    }
+
+    public String askUserInput(String message) {
+        System.out.println(message);
+        Scanner userInputScanner = new Scanner(System.in);
+        String myInput = null;
+        while (myInput == null) {
+            if (userInputScanner.hasNext()) {
+                myInput = userInputScanner.nextLine();
+            }
+        }
+        return myInput;
     }
 }

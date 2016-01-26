@@ -35,9 +35,34 @@ public class PlayerTest {
     Move move21 = new Move(4,4,4,6);
     Move move22 = new Move(5,4,4,7);
 
+    public void stepOne(Player player) {
+        player.addTileToHand(move1.getTileWithoutCoordinates());
+        player.addTileToHand(move2.getTileWithoutCoordinates());
+        player.addTileToHand(move3.getTileWithoutCoordinates());
+        player.addTileToHand(move4.getTileWithoutCoordinates());
+        player.addTileToHand(move5.getTileWithoutCoordinates());
+        player.addTileToHand(move6.getTileWithoutCoordinates());
+        player.addTileToHand(move7.getTileWithoutCoordinates());
+        player.addTileToHand(move8.getTileWithoutCoordinates());
+        player.addTileToHand(move9.getTileWithoutCoordinates());
+        player.addTileToHand(move10.getTileWithoutCoordinates());
+        player.addTileToHand(move11.getTileWithoutCoordinates());
+        player.addTileToHand(move12.getTileWithoutCoordinates());
+        player.addTileToHand(move13.getTileWithoutCoordinates());
+        player.addTileToHand(move14.getTileWithoutCoordinates());
+        player.addTileToHand(move15.getTileWithoutCoordinates());
+        player.addTileToHand(move17.getTileWithoutCoordinates());
+        player.addTileToHand(move18.getTileWithoutCoordinates());
+        player.addTileToHand(move19.getTileWithoutCoordinates());
+        player.addTileToHand(move20.getTileWithoutCoordinates());
+        player.addTileToHand(move21.getTileWithoutCoordinates());
+        player.addTileToHand(move22.getTileWithoutCoordinates());
+    }
+
     @Test
     public void testSameRowAndTestSameColumn() throws Exception {
         Player testPlayer = new Player("Pieter");
+        stepOne(testPlayer);
         myMoves.clear();
         myMoves.add(move1);
         myMoves.add(move2);
@@ -65,6 +90,7 @@ public class PlayerTest {
         players.add(testPlayer);
         Game myTestGame = new Game(players);
         testPlayer.setMyGame(myTestGame);
+        stepOne(testPlayer);
         myMoves.clear();
         myMoves.add(move1);
         myMoves.add(move2);
@@ -106,6 +132,7 @@ public class PlayerTest {
         players.add(testPlayer);
         Game myTestGame = new Game(players);
         testPlayer.setMyGame(myTestGame);
+        stepOne(testPlayer);
         myMoves.clear();
         myMoves.add(move8);
         assertEquals(1, testPlayer.makeMoveGetPoints(myMoves));

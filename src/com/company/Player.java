@@ -1,5 +1,6 @@
 package com.company;
 
+import com.company.Exceptions.DontHaveTileException;
 import com.company.Exceptions.IllegalMoveException;
 import com.company.Exceptions.TileAlreadyPlacedException;
 import com.company.Exceptions.TilesNotInSameRowOrColumnException;
@@ -13,6 +14,12 @@ public class Player {
     private int score;
     private String name;
     private Game myGame;
+    private ArrayList<Tile> myHand = new ArrayList<Tile>();
+
+    public Move askForMove() {
+        return new Move(1,1,1,1);
+        //TODO: Implement!
+    }
 
     public Player(String name) {
         this.name = name;
@@ -20,6 +27,10 @@ public class Player {
 
     public void setMyGame(Game myGame) {
         this.myGame = myGame;
+    }
+
+    public void addTileToHand(Tile tile) {
+        myHand.add(tile);
     }
 
     public boolean sameRow(ArrayList<Move> moves) {
@@ -51,7 +62,26 @@ public class Player {
         else throw new TilesNotInSameRowOrColumnException("I'm afraid I cannot let you do that. Place tiles only in 1 row or column.");
     }
 
+    public void checkTileInHand (Tile tile) throws DontHaveTileException {
+        for (Tile z : myHand) {
+            if (z.getShape() == tile.getShape() && z.getColor() == tile.getColor()) {
+                myHand.remove(z);
+                return;
+            }
+        }
+    }
+
     public int makeMoveGetPoints(ArrayList<Move> moves) {
+        for (Move z : moves) {
+            try {
+                checkTileInHand(z.getTileWithoutCoordinates());
+            }
+            catch (DontHaveTileException e) {
+                e.printStackTrace();
+                System.out.println(e.getMessage());
+                return -1;
+            }
+        }
         myGame.getMyTryoutBoard().increaseMove();
         int myPoints = 0;
         int atMove = myGame.getMyTryoutBoard().getAtMove();

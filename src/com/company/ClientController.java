@@ -11,6 +11,7 @@ public class ClientController {
 
         InetAddress address = InetAddress.getByName(args[0]);
         TUIView tuiView = new TUIView();
+        ClientModel clientModel = new ClientModel();
         Socket socketOne = null;
         String line;
         BufferedReader out = null;
