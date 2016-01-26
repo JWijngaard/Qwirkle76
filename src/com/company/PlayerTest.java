@@ -92,7 +92,6 @@ public class PlayerTest {
         myMoves.clear();
         myMoves.add(move13);
         myMoves.add(move14);
-        //myMoves.add(move15);
         myMoves.add(move17);
         assertEquals(10, testPlayer.makeMoveGetPoints(myMoves));
         myMoves.clear();

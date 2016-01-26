@@ -16,12 +16,12 @@ public class ServerController extends Thread {
     List<String> myList = new ArrayList<String>();
     private ServerView serverView = new ServerView();
     private ServerModel serverModel = new ServerModel();
-    private ArrayList<Player> join2;
-    private ArrayList<Player> join3;
-    private ArrayList<Player> join4;
     List<Socket> clients = serverModel.getClientList();
     Map<String, Socket> playerClientID = serverModel.getPlayerClientID();
     Map<Socket, String> clientIDPlayer = serverModel.getClientIDPlayer();
+    List<Socket> lobbyTwo = new ArrayList<>();
+    List<Socket> lobbyThree = new ArrayList<>();
+    List<Socket> lobbyFour = new ArrayList<>();
     List<String> answer = new ArrayList<>();
 
     public ServerController() {
@@ -87,7 +87,11 @@ public class ServerController extends Thread {
             try {
                 while (true) {
                     line = in.readLine();
-                    while (line != null) {
+                    while (true) {
+                        if(lobbyTwo.size() == 2){
+                            lobbyTwo.remove(0);
+                            lobbyTwo.remove(1);
+                        }
                         try {
                             Thread.sleep(100);
                         } catch (InterruptedException ex) {
@@ -112,18 +116,25 @@ public class ServerController extends Thread {
                                 } catch (Exception e) {
                                     out.println("error 0");
                                 }
-                            } else if (words.get(0).equals("join")) {
-                                try {
-                                    int playerAmount = Integer.parseInt(words.get(1));
-                                }
-                                catch (ArrayIndexOutOfBoundsException e) {
-                                    out.println("error 0");
-                                }
-
-                                break;
-                                //TODO: client joins game
                             } else if (words.get(0).equals("players?")) {
                                 sendToAllTCPAllPlayers(myList);
+                            }
+                            else if (words.get(0).equals("join")) {
+                                try {
+                                    System.out.println("01");
+                                    if(words.get(1).equals("2")){
+                                        System.out.println(serverModel.getPlayerName(socket));
+                                        lobbyTwo.add(socket);
+                                        out.println(" ");
+                                    }else if(words.get(1).equals("3")){
+                                        lobbyThree.add(socket);
+                                    }else if(words.get(1).equals("4")){
+                                        lobbyFour.add(socket);
+                                    }
+                                }catch (Exception e) {
+                                    out.println("error 0");
+                                }
+                                //TODO: client joins game
                             } else {
                                 out.println("error 0");
                                 out.flush();
@@ -133,6 +144,7 @@ public class ServerController extends Thread {
                         } catch (Exception e) {
                             out.println("error 0");
                         }
+                        //if(Hoij in een game zit dan doe dit met een WHILE LOOp)
                         try {
                             if (words.get(0).equals("Place")) {
                                 //TODO: Place Stone
@@ -344,25 +356,13 @@ public class ServerController extends Thread {
         }
     }
     public void sendToClientMessage(String message, Socket socket) {
-                PrintStream outToClient;
-                try {
-                    outToClient = new PrintStream(socket.getOutputStream());
-                    outToClient.println(message);
-                } catch (IOException e) {
-                    serverView.logMessage("Caught an IO exception trying to send to TCP connections");
-                    e.printStackTrace();
-                }
-            }
+        PrintStream outToClient;
+        try {
+            outToClient = new PrintStream(socket.getOutputStream());
+            outToClient.println(message);
+        } catch (IOException e) {
+            serverView.logMessage("Caught an IO exception trying to send to TCP connections");
+            e.printStackTrace();
+        }
     }
-
-
-
-
-
-
-
-
-
-
-
-
+}
