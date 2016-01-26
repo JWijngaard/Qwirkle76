@@ -162,8 +162,8 @@ public class Board {
     //Ook checken of iederen uberhaupt wel een neighbour heeft.
     //Checken of een dubbele er in zit door ze allemaal in een nieuwe ArrayList te plaatsen.
     public boolean checkLegalSituation() throws IllegalMoveException {
-        boolean LegalSituationRows = true;
-        boolean LegalSituationColumns = true;
+        boolean legalSituationRows = true;
+        boolean legalSituationColumns = true;
         qwirkles = 0;
         //First we will check rows, based on color. (left to right)
         for(int i = 0; i < board.length - 1; i++) {
@@ -185,9 +185,14 @@ public class Board {
                                 shapes.add(me.getShape());
                                 me = rightNeighbor(me);
                                 if (rightColor == rightNeighbor(me).getColor() && !shapes.contains(me.getShape())) {
-                                    shapes.add(me.getShape());
-                                    qwirkles += 1;
                                     me = rightNeighbor(me);
+                                    qwirkles++;
+                                    if (rightColor == rightNeighbor(me).getColor() && !shapes.contains(me.getShape())) {
+                                        me = rightNeighbor(me);
+                                        if (me.getColor() != 6) {
+                                            currentLegalSituation = false;
+                                        }
+                                    }
                                 }
                                 else if (me.getColor() == 6 || rightNeighbor(me).getColor() == 6) {
 
@@ -243,10 +248,14 @@ public class Board {
                                 if (rightShape == rightNeighbor(me).getShape() && !colors.contains(me.getColor())) {
                                     colors.add(me.getColor());
                                     me = rightNeighbor(me);
+                                    qwirkles++;
                                     if (rightShape == rightNeighbor(me).getShape() && !colors.contains(me.getColor())) {
-                                        colors.add(me.getColor());
-                                        me = rightNeighbor(me);
-                                        qwirkles += 1;
+                                        if (rightShape == rightNeighbor(me).getShape() && !colors.contains(me.getColor())) {
+                                            me = rightNeighbor(me);
+                                            if (me.getColor() != 6) {
+                                                currentLegalSituation = false;
+                                            }
+                                        }
                                     }
                                     else if (me.getShape() == 6 || rightNeighbor(me).getShape() == 6) {
 
@@ -290,7 +299,7 @@ public class Board {
                     currentLegalSituation = false;
                 }
                 if (currentLegalSituation == false) {
-                    LegalSituationRows = false;
+                    legalSituationRows = false;
                 }
             }
         }
@@ -316,9 +325,15 @@ public class Board {
                                 shapes.add(me.getShape());
                                 me = lowerNeighbor(me);
                                 if (rightColor == lowerNeighbor(me).getColor() && !shapes.contains(me.getShape())) {
-                                    shapes.add(me.getShape());
-                                    qwirkles += 1;
                                     me = lowerNeighbor(me);
+                                    qwirkles++;
+                                    if (rightColor == lowerNeighbor(me).getColor() && !shapes.contains(me.getShape())) {
+                                        me = lowerNeighbor(me);
+                                        if (me.getColor() != 6) {
+                                            currentLegalSituation = false;
+                                            System.out.println(currentLegalSituation);
+                                        }
+                                    }
                                 }
                                 else if (me.getColor() == 6 || lowerNeighbor(me).getColor() == 6) {
 
@@ -374,10 +389,12 @@ public class Board {
                                 if (rightShape == lowerNeighbor(me).getShape() && !colors.contains(me.getColor())) {
                                     colors.add(me.getColor());
                                     me = lowerNeighbor(me);
+                                    qwirkles++;
                                     if (rightShape == lowerNeighbor(me).getShape() && !colors.contains(me.getColor())) {
-                                        colors.add(me.getColor());
                                         me = lowerNeighbor(me);
-                                        qwirkles += 1;
+                                        if (me.getColor() != 6) {
+                                            currentLegalSituation = false;
+                                        }
                                     }
                                     else if (me.getShape() == 6 || lowerNeighbor(me).getShape() == 6) {
 
@@ -421,15 +438,19 @@ public class Board {
                     currentLegalSituation = false;
                 }
                 if (currentLegalSituation == false) {
-                    LegalSituationColumns = false;
+                    System.out.println("WTF IS HIER GAANDE?!");
+                    legalSituationColumns = false;
                 }
+
             }
         }
         boolean hasTileOnItsOwn = false;
+        int count = 0;
         for(int i = 0; i < board.length - 1; i++) {
             for (int j = 0; j < board[i].length - 1; j++) {
                 Tile me = board[i][j];
                 if (me.getColor() != 6) {
+                    count ++;
                     if (leftNeighbor(me).getColor() == 6 && rightNeighbor(me).getColor() == 6 && upperNeigbor(me).getColor() == 6 && lowerNeighbor(me).getColor() ==6) {
                         hasTileOnItsOwn = true;
                     }
@@ -437,11 +458,16 @@ public class Board {
             }
         }
 
-        if (LegalSituationColumns && LegalSituationRows && ! hasTileOnItsOwn) {
+        if (hasTileOnItsOwn && !(count > 1)) {
+            hasTileOnItsOwn = false;
+        }
+
+        if (legalSituationColumns && legalSituationRows && ! hasTileOnItsOwn) {
             return true;
         }
         else {
-            return false;
+            throw new IllegalMoveException("Sorry, that's an illegal move! legalSituationColumns: " + legalSituationColumns
+                    + " legalSituationRows: " + legalSituationRows + "hasTileOnItsOwn: " + hasTileOnItsOwn);
         }
     }
     //Einde van checkcurrentLegalSituation;

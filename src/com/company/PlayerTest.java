@@ -21,6 +21,13 @@ public class PlayerTest {
     Move move7 = new Move(2,4,4,2);
     Move move8 = new Move(2,0,5,2);
     Move move9 = new Move(2,1,6,2);
+    Move move10 = new Move(0,2,1,6);
+    Move move11 = new Move(1,2,1,5);
+    Move move12 = new Move(0,2,0,4);
+    Move move13 = new Move(1,2,3,4);
+    Move move14 = new Move(2,2,4,4);
+    Move move15 = new Move(3,2,5,4);
+    Move move17 = new Move(5,2,2,4);
 
     @Test
     public void testSameRowAndTestSameColumn() throws Exception {
@@ -57,13 +64,11 @@ public class PlayerTest {
         myMoves.add(move2);
         myMoves.add(move3);
         assertEquals(3, testPlayer.makeMoveGetPoints(myMoves));
-        System.out.println(myTestGame.getMyTryoutBoard().toString());
         myMoves.clear();
         myMoves.add(move4);
         myMoves.add(move5);
         myMoves.add(move6);
         assertEquals(7, testPlayer.makeMoveGetPoints(myMoves));
-        System.out.println(myTestGame.getMyTryoutBoard().toString());
         myMoves.clear();
         myMoves.add(move7);
         myMoves.add(move8);
@@ -71,5 +76,21 @@ public class PlayerTest {
         myMoves.clear();
         myMoves.add(move9);
         assertEquals(-1, testPlayer.makeMoveGetPoints(myMoves));
+        myMoves.clear();
+        myMoves.add(move10);
+        myMoves.add(move11);
+        assertEquals(11, testPlayer.makeMoveGetPoints(myMoves));
+        myMoves.clear();
+        myMoves.add(move12);
+        assertEquals(7, testPlayer.makeMoveGetPoints(myMoves));
+        myMoves.clear();
+        myMoves.add(move13);
+        myMoves.add(move14);
+        //myMoves.add(move15);
+        myMoves.add(move17);
+        assertEquals(10, testPlayer.makeMoveGetPoints(myMoves));
+        myMoves.clear();
+        myMoves.add(move15);
+        assertEquals(17, testPlayer.makeMoveGetPoints(myMoves));
     }
 }

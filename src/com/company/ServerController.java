@@ -16,6 +16,9 @@ public class ServerController extends Thread {
     List<String> myList = new ArrayList<String>();
     private ServerView serverView = new ServerView();
     private ServerModel serverModel = new ServerModel();
+    private ArrayList<Player> join2;
+    private ArrayList<Player> join3;
+    private ArrayList<Player> join4;
     List<Socket> clients = serverModel.getClientList();
     Map<String, Socket> playerClientID = serverModel.getPlayerClientID();
     Map<Socket, String> clientIDPlayer = serverModel.getClientIDPlayer();
@@ -110,7 +113,13 @@ public class ServerController extends Thread {
                                     out.println("error 0");
                                 }
                             } else if (words.get(0).equals("join")) {
-                                sendToClientMessage(serverModel.getPlayerName(socket), socket);
+                                try {
+                                    int playerAmount = Integer.parseInt(words.get(1));
+                                }
+                                catch (ArrayIndexOutOfBoundsException e) {
+                                    out.println("error 0");
+                                }
+
                                 break;
                                 //TODO: client joins game
                             } else if (words.get(0).equals("players?")) {
