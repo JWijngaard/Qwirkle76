@@ -12,15 +12,13 @@
 //        super(name);
 //    }
 //
-//    public static void main(String[] args) {
+//    public void test() {
 //        ComputerPlayer test = new ComputerPlayer("pieter");
 //        ArrayList<Player> players = new ArrayList<>();
 //        players.add(test);
 //        myGame = new Game(players);
 //        myGame.fillMyBag();
-//        for (int i = 0; i < 6; i++) {
-//            test.addTileToHand(myGame.getBagOfStones().get(i));
-//        }
+//        myGame.distributeTiles();
 //        try {
 //            myGame.getMyBoard().makeMove(3, 2, 6, 6, 1);
 //            myGame.getMyBoard().makeMove(4,2,6,7,1);
@@ -40,7 +38,7 @@
 //
 //    @Override
 //    public void myTurn() {
-//        ArrayList<Move> askForMoveResult = this.askForMove();
+//        ArrayList<Move> askForMoveResult = askForMove();
 //        if (!(askForMoveResult.isEmpty())) {
 //            makeMoveGetPoints(askForMoveResult);
 //        } else {
@@ -56,15 +54,17 @@
 //        Board theBoard = myGame.getMyBoard();
 //        for (int i = 0; i < theBoard.getBoard().length; i++) {
 //            for (int j = 0; j < theBoard.getBoard().length; j++) {
+//                System.out.println(bestMoveAmount);
 //                if (theBoard.getBoard()[i][j].getShape() != 6) {
-//                    for (int k = 0; k < getMyHand().size(); k++) {
-//                        Tile me = getMyHand().get(k);
+//                    for (int k = 0; k < myHand.size(); k++) {
+//                        Tile me = myHand.get(k);
 //                        ArrayList<Move> moves = new ArrayList<>();
 //                        Move myMove1 = new Move(me.getShape(), me.getColor(), i, (j-1));
 //                        moves.add(myMove1);
 //                        int amount1 = makeMoveGetPointsWithoutActuallyMakingTheMove(moves);
 //                        if (amount1 > bestMoveAmount) {
 //                            bestMove = moves;
+//                            bestMoveAmount = amount1;
 //                        }
 //                        moves.clear();
 //                        Move myMove2 = new Move(me.getShape(), me.getColor(), i, (j+1));
@@ -72,6 +72,7 @@
 //                        int amount2 = makeMoveGetPointsWithoutActuallyMakingTheMove(moves);
 //                        if (amount2 > bestMoveAmount) {
 //                            bestMove = moves;
+//                            bestMoveAmount = amount2;
 //                        }
 //                        moves.clear();
 //                        Move myMove3 = new Move(me.getShape(), me.getColor(), (i-1), j);
@@ -79,6 +80,7 @@
 //                        int amount3 = makeMoveGetPointsWithoutActuallyMakingTheMove(moves);
 //                        if (amount3 > bestMoveAmount) {
 //                            bestMove = moves;
+//                            bestMoveAmount = amount3;
 //                        }
 //                        moves.clear();
 //                        Move myMove4 = new Move(me.getShape(), me.getColor(), (i+1), j);
@@ -86,6 +88,7 @@
 //                        int amount4 = makeMoveGetPointsWithoutActuallyMakingTheMove(moves);
 //                        if (amount4 > bestMoveAmount) {
 //                            bestMove = moves;
+//                            bestMoveAmount = amount4;
 //                        }
 //                        moves.clear();
 //                    }

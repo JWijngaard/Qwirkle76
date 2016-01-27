@@ -3,6 +3,8 @@ package com.company;
 import com.company.Exceptions.NotEnoughTilesInBagException;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -14,6 +16,7 @@ public class Game {
     private Board myBoard;
     private Board myTryoutBoard;
     private ArrayList<Tile> bagOfStones = new ArrayList<>();
+    private Player turn;
 
     public Game(ArrayList<Player> myPlayers) {
         myBoard = new Board();
@@ -33,6 +36,23 @@ public class Game {
                 }
             }
         }
+    }
+
+    public void setTurn(Player player) {
+        turn = player;
+    }
+
+    public Player getTurn() {
+        return turn;
+    }
+
+    public Player nextTurn() {
+        int currentPlayerIndex = myPlayers.indexOf(turn);
+        if (currentPlayerIndex == myPlayers.size()) {
+            turn = myPlayers.get(0);
+        }
+        else turn = myPlayers.get((currentPlayerIndex + 1));
+        return turn;
     }
 
     public void distributeTiles() {

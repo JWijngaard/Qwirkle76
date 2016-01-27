@@ -13,26 +13,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class Player {
     private int score;
     private String name;
-    protected static Game myGame;
+    protected Game myGame;
     private TUIView myView = new TUIView();
-    private CopyOnWriteArrayList<Tile> myHand = new CopyOnWriteArrayList<Tile>();
+    protected CopyOnWriteArrayList<Tile> myHand = new CopyOnWriteArrayList<Tile>();
 
-    public static void main(String[] args) {
-        Player test = new Player("pieter");
-        ArrayList<Player> players = new ArrayList<>();
-        players.add(test);
-        myGame = new Game(players);
-        myGame.fillMyBag();
-        myGame.distributeTiles();
-        test.setScore(test.makeMoveGetPoints(test.askForMove()) + test.getScore());
-        System.out.println(myGame.getMyBoard().toString());
-        System.out.println(test.getScore());
-        test.setScore(test.makeMoveGetPoints(test.askForMove()) + test.getScore());
-        System.out.println(myGame.getMyBoard().toString());
-        System.out.println(test.getScore());
-        test.setScore(test.makeMoveGetPoints(test.askForMove()) + test.getScore());
-        System.out.println(myGame.getMyBoard().toString());
-        System.out.println(test.getScore());
+    public String getName() {
+        return name;
     }
 
     public void setMyHand(CopyOnWriteArrayList<Tile> myHand) {
@@ -297,15 +283,6 @@ public class Player {
     }
 
     public int makeMoveGetPointsWithoutActuallyMakingTheMove(ArrayList<Move> moves) {
-        for (Move z : moves) {
-            try {
-                checkTileInHand(z.getTileWithoutCoordinates());
-            }
-            catch (DontHaveTileException e) {
-                System.out.println(e.getMessage());
-                return -1;
-            }
-        }
         myGame.getMyTryoutBoard().increaseMove();
         int myPoints = 0;
         int atMove = myGame.getMyTryoutBoard().getAtMove();
@@ -316,6 +293,15 @@ public class Player {
                     myGame.getMyTryoutBoard().makeMove(moves.get(i).getShape(), moves.get(i).getColor(), moves.get(i).getC1(), moves.get(i).getC2(), atMove);
                     System.out.println(myGame.getMyTryoutBoard().toString());
                 } catch (TileAlreadyPlacedException e) {
+                    System.out.println(e.getStackTrace());
+                    for(int k = 0; k < myGame.getMyTryoutBoard().getBoard().length; k++) {
+                        for (int j = 0; j < myGame.getMyTryoutBoard().getBoard()[k].length; j++) {
+                            myGame.getMyTryoutBoard().getBoard()[k][j].setColor(myGame.getMyBoard().getBoard()[k][j].getColor());
+                            myGame.getMyTryoutBoard().getBoard()[k][j].setShape(myGame.getMyBoard().getBoard()[k][j].getShape());
+                        }
+                    }
+                    return -1;
+                } catch (ArrayIndexOutOfBoundsException e) {
                     System.out.println(e.getStackTrace());
                     for(int k = 0; k < myGame.getMyTryoutBoard().getBoard().length; k++) {
                         for (int j = 0; j < myGame.getMyTryoutBoard().getBoard()[k].length; j++) {
@@ -343,12 +329,12 @@ public class Player {
             return myPoints;
         }
         catch (IllegalMoveException e) {
-            e.printStackTrace();
             for(int i = 0; i < myGame.getMyTryoutBoard().getBoard().length; i++) {
                 for (int j = 0; j < myGame.getMyTryoutBoard().getBoard()[i].length; j++) {
                     myGame.getMyTryoutBoard().getBoard()[i][j].setColor(myGame.getMyBoard().getBoard()[i][j].getColor());
                     myGame.getMyTryoutBoard().getBoard()[i][j].setShape(myGame.getMyBoard().getBoard()[i][j].getShape());
                 }
+                return -1;
             }
             return -1;
         }
