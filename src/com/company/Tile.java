@@ -19,10 +19,10 @@ public class Tile {
         color = 6;
     }
 
-
     public void setShape(int newShape) {
         shape = newShape;
     }
+
     public void setColor(int newColor) {
         color = newColor;
     }

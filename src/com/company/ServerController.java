@@ -8,8 +8,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by JulianStellaard on 26/01/16.
@@ -18,9 +20,10 @@ public class ServerController extends Thread{
 
     private ServerModel serverModel = new ServerModel();
     private ServerView serverVieuw = new ServerView();
-    List<Socket> lobbyTwo = serverModel.getLobbyClientIDTwo();
-    List<Socket> lobbyThree = serverModel.getLobbyClientIDThree();
+    List<Socket> lobbyTwo;
+    List<Socket> lobbyThree;
     List<Socket> lobbyFour = serverModel.getLobbyClientIDFour();
+    Map<Socket, Game> socketGame = serverModel.getSocketGame();
     List<String> playerNameList = serverModel.myList;
     List<Socket> clients = serverModel.getClientList();
     Socket socket = null;
@@ -58,9 +61,33 @@ public class ServerController extends Thread{
         try {
             while(true) {
                 inComing = in.readLine();
-                System.out.println(inComing);
-                while (inComing != null) {
+                while (true) {
                     List<String> words = Arrays.asList((inComing.split("\\s+")));
+                    System.out.println("begin");
+                    System.out.println(lobbyTwo);
+                    if(socketGame.get(socket) != null) {
+                        System.out.println("move");
+                        parserMoves(socketGame.get(socket));
+                    }
+                    if(lobbyTwo.size() == 2 && lobbyTwo.contains(socket)) {
+                        System.out.println("lol");
+                        String name1 = serverModel.getPlayerName(lobbyTwo.get(0));
+                        String name2 = serverModel.getPlayerName(lobbyTwo.get(1));
+                        Player player1 = new Player(name1);
+                        Player player2 = new Player(name2);
+                        ArrayList<Player> players = new ArrayList<>();
+                        players.add(player1);
+                        players.add(player2);
+                        Game myGame = new Game(players);
+                        myGame.fillMyBag();
+                        myGame.distributeTiles();
+                        socketGame.put(lobbyTwo.get(0), myGame);
+                        socketGame.put(lobbyTwo.get(1), myGame);
+                        System.out.println(lobbyTwo);
+                        System.out.println("wha");
+                        lobbyTwo.remove(0);
+                        lobbyTwo.remove(0);
+                    }
                     if (inComing.startsWith("hello")) {
                         if (words.get(1).equals("Place") || words.get(1).equals("trade") || words.get(1).equals("join") || words.get(1).equals("players?")) {
                             out.println("error 2");
@@ -77,13 +104,14 @@ public class ServerController extends Thread{
                             serverVieuw.logMessage("Player: " + words.get(1) + " joined the server!");
                             playerNameList.add(words.get(1));
                         } else {
-                            System.out.println("-4");
                             out.println("error 0");
                             throw new WrongCommandoException("error 0");
                         }
-                    } else if (words.get(0).equals("players?")) {
+                    }
+                    else if (words.get(0).equals("players?")) {
                         //TODO: Send to all players
-                    } else if (words.get(0).equals("join")) {
+                    }
+                    else if (words.get(0).equals("join")) {
                         if (words.get(1).equals("2")) {
                             lobbyTwo.add(socket);
                             if (lobbyTwo.size() != 2) {
@@ -103,22 +131,35 @@ public class ServerController extends Thread{
                             out.println("error 0");
                             throw new WrongCommandoException("error 0");
                         }
-                    } else {
+                    }
+                    else {
                         out.println("error 0");
+                        System.out.println("-2");
                         System.out.println("error 0");
                     }
+                    System.out.println("-8");
                     out.flush();
                     inComing = in.readLine();
                 }
-                ServerThread.shutDown();
             }
         }catch (IOException e) {
             ServerThread.shutDown();
         }
     }
 
-    public void parserMoves() {
+    public void parserMoves(Game myGame) {
+        try {
 
+            while(true) {
+                inComing = in.readLine();
+                while (inComing != null) {
+                    List<String> words = Arrays.asList((inComing.split("\\s+")));
+                }
+                ServerThread.shutDown();
+            }
+        }catch (IOException e) {
+            ServerThread.shutDown();
+        }
     }
 
 }

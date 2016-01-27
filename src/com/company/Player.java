@@ -173,24 +173,45 @@ public class Player {
 
     public boolean sameRow(ArrayList<Move> moves) {
         boolean sameRow = true;
-        int x = moves.get(0).getC1();
-        for (int i = 0; i < moves.size(); i++) {
-            if (moves.get(i).getC1() != x) {
-                sameRow = false;
+        try {
+            int x = moves.get(0).getC1();
+            for (int i = 0; i < moves.size(); i++) {
+                if (moves.get(i).getC1() != x) {
+                    sameRow = false;
+                }
             }
+        }
+        catch (IndexOutOfBoundsException e) {
+            return false;
         }
         return sameRow;
     }
 
-    public boolean sameColumn(ArrayList<Move> moves) {
-        boolean sameColumn = true;
-        int x = moves.get(0).getC2();
-        for (int i = 0; i < moves.size(); i++) {
-            if (moves.get(i).getC2() != x) {
-                sameColumn = false;
-            }
+    public String myHandToStringForNewStonesCommand() {
+        String result = "newstones";
+        for (Tile tile : myHand) {
+            result += " ";
+            result += tile.getShape();
+            result += ",";
+            result += tile.getColor();
         }
-        return sameColumn;
+        return result;
+    }
+
+    public boolean sameColumn(ArrayList<Move> moves) {
+        try {
+            boolean sameColumn = true;
+            int x = moves.get(0).getC2();
+            for (int i = 0; i < moves.size(); i++) {
+                if (moves.get(i).getC2() != x) {
+                    sameColumn = false;
+                }
+            }
+            return sameColumn;
+        }
+        catch (IndexOutOfBoundsException e) {
+            return false;
+        }
     }
 
     public boolean checkSameRowOrColumn (ArrayList<Move> moves) throws TilesNotInSameRowOrColumnException {

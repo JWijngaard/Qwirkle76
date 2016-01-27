@@ -14,6 +14,7 @@ public class ServerModel {
     private List<Socket> clients;
     private Map<String, Socket> playerClientID;
     private Map<Socket, String> clientIDPlayer;
+    private Map<Socket, Game> socketGame;
     List<Socket> lobbyTwo;
     List<Socket> lobbyThree;
     List<Socket> lobbyFour;
@@ -23,6 +24,7 @@ public class ServerModel {
         clients = new ArrayList<>();
         playerClientID = new HashMap<>();
         clientIDPlayer = new HashMap<>();
+        socketGame =new HashMap<>();
         lobbyTwo = new ArrayList<>();
         lobbyThree = new ArrayList<>();
         lobbyFour = new ArrayList<>();
@@ -34,6 +36,10 @@ public class ServerModel {
 
     public Map<String, Socket> getPlayerClientID() {
         return playerClientID;
+    }
+
+    public Map<Socket, Game> getSocketGame() {
+        return socketGame;
     }
 
     public Map<Socket, String> getClientIDPlayer() {

@@ -73,7 +73,7 @@ public class ClientController {
         inSer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         outSer = new PrintWriter(socket.getOutputStream());
         try {
-            String messageOut = "hello julian";
+            String messageOut = "hello js";
             outSer.println(messageOut);
             outSer.flush();
         }catch (Exception e) {
