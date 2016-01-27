@@ -13,14 +13,6 @@ public class TUIView {
         System.out.println("Client: " + message);
     }
 
-    public void logMessageInt(String message, int messageInt){
-        System.out.println("Client: " + message + messageInt);
-    }
-
-    public void logInt(int messageInt){
-        System.out.println("Client: " + messageInt);
-    }
-
     public String askUserInput(String message) {
         System.out.println(message);
         Scanner userInputScanner = new Scanner(System.in);

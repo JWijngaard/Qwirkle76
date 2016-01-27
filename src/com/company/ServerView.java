@@ -1,5 +1,7 @@
 package com.company;
 
+import java.util.Scanner;
+
 /**
  * Created by Jelle on 12/01/16.
  */
@@ -13,11 +15,15 @@ public class ServerView {
         System.out.println("Server: " + message);
     }
 
-    public void logMessageInt(String message, int messageInt){
-        System.out.println("Server: " + message + messageInt);
-    }
-
-    public void logInt(int messageInt){
-        System.out.println("Server: " + messageInt);
+    public String askUserInput(String message) {
+        System.out.println(message);
+        Scanner userInputScanner = new Scanner(System.in);
+        String myInput = null;
+        while (myInput == null) {
+            if (userInputScanner.hasNext()) {
+                myInput = userInputScanner.nextLine();
+            }
+        }
+        return myInput;
     }
 }
