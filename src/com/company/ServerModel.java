@@ -11,25 +11,34 @@ import java.util.Map;
  */
 public class ServerModel {
     List<String> myList;
-    private List<Socket> clients;
-    private Map<String, Socket> playerClientID;
-    private Map<Socket, String> clientIDPlayer;
-    private Map<Socket, Game> socketGame;
+    List<Socket> clients;
+    List<String> playerNames;
+    Map<String, Socket> playerClientID;
+    Map<Socket, String> clientIDPlayer;
+    Map<Socket, Game> socketGame;
+    Map<String, Socket> test;
     List<Socket> lobbyTwo;
     List<Socket> lobbyThree;
     List<Socket> lobbyFour;
 
     public ServerModel() {
         myList = new ArrayList<>();
+        playerNames = new ArrayList<>();
         clients = new ArrayList<>();
         playerClientID = new HashMap<>();
         clientIDPlayer = new HashMap<>();
-        socketGame =new HashMap<>();
+        test = new HashMap<>();
+        socketGame = new HashMap<>();
         lobbyTwo = new ArrayList<>();
         lobbyThree = new ArrayList<>();
         lobbyFour = new ArrayList<>();
     }
 
+
+
+    public Map<String, Socket> getTest() {
+        return test;
+    }
     public List<Socket> getClientList() {
         return clients;
     }
@@ -46,10 +55,6 @@ public class ServerModel {
         return clientIDPlayer;
     }
 
-    public String getPlayerName(Socket socket) {
-        String playerName = clientIDPlayer.get(socket);
-        return playerName;
-    }
 
     public List<Socket> getLobbyClientIDTwo() {
         return lobbyTwo;
@@ -59,5 +64,9 @@ public class ServerModel {
     }
     public List<Socket> getLobbyClientIDFour() {
         return lobbyFour;
+    }
+
+    public List<String> getPlayername() {
+        return playerNames;
     }
 }
