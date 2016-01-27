@@ -12,7 +12,7 @@ public class ServerView {
     }
 
     public void logMessage(String message){
-        System.out.println("Server: " + message);
+        System.out.println("Server: '" + message + "'");
     }
 
     public String askUserInput(String message) {
