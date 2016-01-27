@@ -152,13 +152,13 @@ public class ServerThread extends Thread {
                                         myList.add(words.get(1));
                                         clientIDPlayer.put(socket, words.get(1));
                                         playerClientID.put(words.get(1), socket);
+                                        break;
                                     } else {
                                         error("0", socket);
                                     }
-                                    out.flush();
-                                    inComing = in.readLine();
                                 }
-                                break;
+                                out.flush();
+                                inComing = in.readLine();
                             }
                             while(true) {
                                 if (words.get(0).equals("players?")) {
@@ -168,12 +168,15 @@ public class ServerThread extends Thread {
                                     if (words.get(1).equals("2")) {
                                         lobbyTwo.add(socket);
                                         sendToTCP("joint lobby 2 waiting for players", socket);
+                                        break;
                                     } else if (words.get(1).equals("3")) {
                                         lobbyThree.add(socket);
                                         sendToTCP("joint lobby 3 waiting for players", socket);
+                                        break;
                                     } else if (words.get(1).equals("4")) {
                                         lobbyFour.add(socket);
                                         sendToTCP("joint lobby 4 waiting for players", socket);
+                                        break;
                                     } else {
                                         error("0", socket);
                                     }
@@ -182,8 +185,8 @@ public class ServerThread extends Thread {
                                     error("0", socket);
                                     System.out.println("error 0");
                                 }
-                                
-                                break;
+                                out.flush();
+                                inComing = in.readLine();
                             }
                             while (true) {
                                 if (socketGame.get(socket) != null) {
