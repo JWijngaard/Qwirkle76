@@ -12,7 +12,6 @@ import java.util.HashMap;
 public class ServerController {
     private ServerView myView;
     private static int port;
-    private ServerController me;
     protected volatile ArrayList<Game> myGames = new ArrayList<>();
     protected volatile HashMap<String, ConnectedClient> nameToConnectedClient;
     protected volatile HashMap<ConnectedClient, String> connectedClientToName;

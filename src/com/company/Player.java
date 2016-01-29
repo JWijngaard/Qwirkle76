@@ -218,6 +218,10 @@ public class Player {
     }
 
     public int makeMoveGetPoints(ArrayList<Move> moves) {
+        CopyOnWriteArrayList<Tile> myOldHand = new CopyOnWriteArrayList<>();
+        for (Tile tile : myHand) {
+            myOldHand.add(tile);
+        }
         for (Move z : moves) {
             try {
                 checkTileInHand(z.getTileWithoutCoordinates());
@@ -225,6 +229,7 @@ public class Player {
             catch (DontHaveTileException e) {
                 e.printStackTrace();
                 System.out.println(e.getMessage());
+                myHand = myOldHand;
                 return -1;
             }
         }
@@ -245,12 +250,14 @@ public class Player {
                             myGame.getMyTryoutBoard().getBoard()[k][j].setShape(myGame.getMyBoard().getBoard()[k][j].getShape());
                         }
                     }
+                    myHand = myOldHand;
                     return -1;
                 }
             }
         }
         catch (TilesNotInSameRowOrColumnException e) {
             System.out.println(e.getStackTrace());
+            myHand = myOldHand;
             return -1;
         }
         try {
@@ -278,6 +285,7 @@ public class Player {
                     myGame.getMyTryoutBoard().getBoard()[i][j].setShape(myGame.getMyBoard().getBoard()[i][j].getShape());
                 }
             }
+            myHand = myOldHand;
             return -1;
         }
     }

@@ -1,11 +1,15 @@
 package com.company;
 
+import com.company.Exceptions.DontHaveTileException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by Jelle on 27/01/16.
@@ -71,38 +75,146 @@ public class ConnectedClient implements Runnable {
                             if (splittedString[0].equals("place")) {
                                 String result = "";
                                 for (int i = 1; i < splittedString.length; i++) {
-                                    result += splittedString[i];
+                                    result += splittedString[i] + ",";
                                 }
+                                System.out.println(result);
                                 String[] strings = result.split(",");
-                                int[] ints = new int[20];
+                                int[] ints = new int[23];
                                 for (int j = 0; j < strings.length; j++) {
                                     ints[j] = Integer.parseInt(strings[j]);
                                 }
                                 ArrayList<Move> moves = new ArrayList<>();
-                                if (ints.length > 4) {
-                                    for(int k = 0; k < (ints.length/4); k++) {
+                                int amount = 0;
+                                try {
+                                    if (splittedString.length > 1) {
                                         Move move = new Move(ints[0],ints[1],ints[3],ints[2]);
-                                        moves.add(move);
+                                        out.println("" + ints[0] + ints[1] + ints[3] +ints[2]);
+                                        if (!(move.getC1() == 0 && move.getC2() == 0 && move.getColor() == 0 && move.getShape() == 0)) {
+                                            moves.add(move);
+                                            amount++;
+                                        }
                                     }
+                                    if (splittedString.length > 2) {
+                                        Move move = new Move(ints[4],ints[5],ints[7],ints[6]);
+                                        out.println("" + ints[4] + ints[5] + ints[7] +ints[6] + "Jep I got here");
+                                        if (!(move.getC1() == 0 && move.getC2() == 0 && move.getColor() == 0 && move.getShape() == 0)) {
+                                            moves.add(move);
+                                            amount++;
+                                        }
+                                    }
+                                    if (splittedString.length > 3) {
+                                        Move move = new Move(ints[8],ints[9],ints[11],ints[10]);
+                                        if (!(move.getC1() == 0 && move.getC2() == 0 && move.getColor() == 0 && move.getShape() == 0)) {
+                                            moves.add(move);
+                                            amount++;
+                                        }
+                                    }
+                                    if (splittedString.length > 4) {
+                                        Move move = new Move(ints[12],ints[13],ints[15],ints[14]);
+                                        if (!(move.getC1() == 0 && move.getC2() == 0 && move.getColor() == 0 && move.getShape() == 0)) {
+                                            moves.add(move);
+                                            amount++;
+                                        }
+                                    }
+                                    if (splittedString.length > 5) {
+                                        Move move = new Move(ints[16],ints[17],ints[19],ints[18]);
+                                        if (!(move.getC1() == 0 && move.getC2() == 0 && move.getColor() == 0 && move.getShape() == 0)) {
+                                            moves.add(move);
+                                            amount++;
+                                        }
+                                    }
+                                    if (splittedString.length > 6) {
+                                        Move move = new Move(ints[20], ints[21], ints[23], ints[22]);
+                                        if (!(move.getC1() == 0 && move.getC2() == 0 && move.getColor() == 0 && move.getShape() == 0)) {
+                                            moves.add(move);
+                                            amount++;
+                                        }
+                                    }
+                                } catch (ArrayIndexOutOfBoundsException e) {
+                                    e.printStackTrace();
+                                    moves.clear();
                                 }
                                 Game myGame = serverController.getInGame().get(this);
                                 String myName = serverController.getConnectedClientToName().get(this);
-                                Player me = new Player("place");
+                                Player me = null;
                                 for (Player player : myGame.getMyPlayers()) {
                                     if (myName.equals(player.getName())) {
                                         me = player;
                                     }
                                 }
-                                int points = me.makeMoveGetPoints(moves);
+                                int points = 0;
+                                if (me != null) {
+                                    points = me.makeMoveGetPoints(moves);
+                                    sendToClient("My tiles are: " + me.myHandToString());
+                                }
                                 if (points != -1) {
-                                    sendToClient(points);
+                                    splittedString[0] = "placed " + serverController.getConnectedClientToName().get(this) + " " + points + " ";
+                                    sendToClient(newTiles(myGame,amount));
+                                    String result2 = "";
+                                    for (String string : splittedString) {
+                                        result2 += string + " ";
+                                    }
+                                    serverController.sendToAllClientsIngame(myGame, result2);
                                     setNextTurn();
                                 } else {
+                                    out.println("wtf");
                                     error(out, 1);
                                 }
                             }
+                            if (splittedString[0].equals("trade")) {
+                                int amount = 0;
+                                Game myGame = serverController.getInGame().get(this);
+                                ArrayList<Tile> tilesToTrade = new ArrayList<>();
+                                for (String string : splittedString) {
+                                    if (!string.equals("trade")) {
+                                        String[] strings = string.split(",");
+                                        int[] ints = new int[6];
+                                        try {
+                                            ints[0] = Integer.parseInt(strings[0]);
+                                            ints[1] = Integer.parseInt(strings[1]);
+                                            Tile tile = new Tile(-100, -100);
+                                            tile.setColor(ints[1]);
+                                            tile.setShape(ints[0]);
+                                            System.out.println(tile);
+                                            tilesToTrade.add(tile);
+                                        } catch (ArrayIndexOutOfBoundsException e) {
+
+                                        }
+                                    }
+                                }
+                                String myName = serverController.getConnectedClientToName().get(this);
+                                Player me = null;
+                                for (Player player : myGame.getMyPlayers()) {
+                                    if (myName.equals(player.getName())) {
+                                        me = player;
+                                        System.out.println("test 2");
+                                    }
+                                }
+                                try {
+                                    for (Tile tile : tilesToTrade) {
+                                        me.checkTileInHand(tile);
+                                        amount++;
+                                        System.out.println("test 3");
+                                    }
+                                } catch (DontHaveTileException e) {
+                                    System.out.println("test 4");
+                                    tilesToTrade = null;
+                                    amount = 0;
+                                    error(out, 1);
+                                    serverController.getMyView().logMessage("Wrong trade command.");
+                                }
+                                for (Tile tile : tilesToTrade) {
+                                    myGame.addToBag(tile);
+                                    System.out.println("test 5");
+                                }
+                                if (amount > 0) {
+                                    sendToClient(newTiles(myGame, amount));
+                                    System.out.println("test 6");
+                                    setNextTurn();
+                                }
+                            }
                         } else if (serverController.getInGame().containsKey(this)) {
-                            //Zit ingame heeft geen turn
+                            error(out, 1);
                         }
                     }
                 }
@@ -137,6 +249,7 @@ public class ConnectedClient implements Runnable {
                 serverController.getInGame().put(myClients.get(j), newGame);
             }
             serverController.getWaitingForGameAmount().put(amount, new ArrayList<ConnectedClient>());
+            newGame.setPlayersInGame();
             newGame.fillMyBag();
             newGame.distributeTiles();
             sendStartCommand();
@@ -203,6 +316,25 @@ public class ConnectedClient implements Runnable {
             Object[] myKeySet = serverController.getNameToConnectedClient().keySet().toArray();
             String current = (String) myKeySet[i];
             result += current + " ";
+        }
+        return result;
+    }
+
+    public String newTiles(Game game, int amount) {
+        ArrayList<Tile> bagOfStones = game.getBagOfStones();
+        CopyOnWriteArrayList<Tile> newHand = new CopyOnWriteArrayList<>();
+        for (int k = 0; k < amount; k++) {
+            Random randomGenerator = new Random();
+            int j = randomGenerator.nextInt(bagOfStones.size());
+            newHand.add(bagOfStones.get(j));
+            bagOfStones.remove(j);
+        }
+        String result = "newstones ";
+        for (Tile tile : newHand) {
+            result += tile.getShape();
+            result += ",";
+            result += tile.getColor();
+            result += " ";
         }
         return result;
     }

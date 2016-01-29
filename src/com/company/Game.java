@@ -48,11 +48,15 @@ public class Game {
 
     public Player nextTurn() {
         int currentPlayerIndex = myPlayers.indexOf(turn);
-        if (currentPlayerIndex == myPlayers.size()) {
+        if (currentPlayerIndex == (myPlayers.size() -1)) {
             turn = myPlayers.get(0);
         }
         else turn = myPlayers.get((currentPlayerIndex + 1));
         return turn;
+    }
+
+    public void addToBag(Tile t) {
+        bagOfStones.add(t);
     }
 
     public void distributeTiles() {
@@ -66,6 +70,12 @@ public class Game {
                 bagOfStones.remove(j);
             }
             thisPlayer.setMyHand(newHand);
+        }
+    }
+
+    public void setPlayersInGame() {
+        for (Player player : myPlayers) {
+            player.setMyGame(this);
         }
     }
 

@@ -234,7 +234,7 @@ public class Board {
                     ArrayList<Integer> colors = new ArrayList<Integer>();
                     colors.add(me.getColor());
                     me = rightNeighbor(me);
-                    if (currentLegalSituation == false) {
+                    if (!currentLegalSituation) {
                         currentLegalSituation = true;
                     }
                     if (rightShape == rightNeighbor(me).getShape() && !colors.contains(me.getColor())) {
